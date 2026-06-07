@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// @ts-ignore: allow side-effect CSS import when no type declarations are present
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
