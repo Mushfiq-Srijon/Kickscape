@@ -36,23 +36,40 @@ class SyncWorldCupData extends Command
 
     private function syncTeams($api)
     {
-        $response = $api->getCompetition();
+        $response = $api->getMatches();
 
-        if (!$response || !isset($response['teams'])) {
-            $this->error('Failed to fetch teams');
+        if (!$response || !isset($response['matches'])) {
+            $this->error('Failed to fetch matches');
             return;
         }
 
-        foreach ($response['teams'] as $team) {
+        $synced = 0;
+        $teams = [];
+
+        // Extract unique teams from matches
+        foreach ($response['matches'] as $match) {
+            if ($match['homeTeam']['name']) {
+                $teams[$match['homeTeam']['id']] = $match['homeTeam'];
+            }
+            if ($match['awayTeam']['name']) {
+                $teams[$match['awayTeam']['id']] = $match['awayTeam'];
+            }
+        }
+
+        // Sync teams
+        foreach ($teams as $team) {
             Team::updateOrCreate(
                 ['api_id' => $team['id']],
                 [
+                    'api_id' => $team['id'],
                     'name' => $team['name'],
                     'country_code' => $team['shortName'] ?? substr($team['name'], 0, 3),
-                    'api_id' => $team['id'],
                 ]
             );
+            $synced++;
         }
+
+        $this->info("✅ Teams synced: $synced");
     }
 
     private function syncMatches($api)
@@ -96,26 +113,19 @@ class SyncWorldCupData extends Command
 
     private function syncStandings($api)
     {
-        $response = $api->getStandings();
+        // For now, assign groups manually based on team count
+        $groups = ['GROUP_A', 'GROUP_B', 'GROUP_C', 'GROUP_D', 'GROUP_E', 'GROUP_F', 'GROUP_G', 'GROUP_H', 'GROUP_I', 'GROUP_J', 'GROUP_K', 'GROUP_L'];
 
-        if (!$response || !isset($response['standings'])) {
-            $this->error('Failed to fetch standings');
-            return;
+        $teams = Team::all();
+        $teamsPerGroup = ceil($teams->count() / 12);
+
+        foreach ($teams as $index => $team) {
+            $groupIndex = floor($index / $teamsPerGroup);
+            $group = $groups[$groupIndex] ?? 'GROUP_A';
+
+            $team->update(['group' => $group]);
         }
 
-        foreach ($response['standings'] as $group) {
-            foreach ($group['table'] as $standing) {
-                Team::where('api_id', $standing['team']['id'])->update([
-                    'played' => $standing['playedGames'],
-                    'wins' => $standing['won'],
-                    'draws' => $standing['draw'],
-                    'losses' => $standing['lost'],
-                    'goals_for' => $standing['goalsFor'],
-                    'goals_against' => $standing['goalsAgainst'],
-                    'points' => $standing['points'],
-                    'group' => $group['group'] ?? null,
-                ]);
-            }
-        }
+        $this->info("✅ Groups assigned to teams");
     }
 }
