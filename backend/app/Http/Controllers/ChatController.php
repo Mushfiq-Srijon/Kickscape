@@ -16,63 +16,73 @@ class ChatController extends Controller
         $query = $request->input('query');
         $sessionId = $request->input('session_id', uniqid());
 
-        try {
-            // Enrich with WC data
-            $standings = Team::orderBy('points', 'desc')->limit(10)->get();
-            $topScorers = Player::orderBy('goals', 'desc')->limit(5)->get();
-            $upcomingMatches = Contest::where('status', 'upcoming')
-                ->orderBy('match_date')
-                ->limit(3)
-                ->get();
+        // Fetch all real-time WC 2026 data
+        $teams = Team::orderBy('group')->get();
+        $matches = Contest::orderBy('match_date')->get();
 
-            $context = "Current World Cup 2026 Data:\n";
-            $context .= "Top Teams: " . json_encode($standings) . "\n";
-            $context .= "Top Scorers: " . json_encode($topScorers) . "\n";
-            $context .= "Upcoming Matches: " . json_encode($upcomingMatches);
+        $wcContext = "# World Cup 2026 Complete Data\n\n";
 
-            // Call Groq API
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
-            ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', [
-                        'model' => 'llama-3.3-70b-versatile', 
-                        'messages' => [
-                            [
-                                'role' => 'user',
-                                'content' => "You are a World Cup 2026 expert. Use this data:\n$context\n\nUser question: $query"
-                            ]
-                        ],
-                        'max_tokens' => 1024,
-                    ]);
-
-            $data = $response->json();
-
-            // Debug: Log the response
-            \Log::info('Groq Response:', $data);
-
-            // Check if response has choices
-            if (!isset($data['choices']) || empty($data['choices'])) {
-                throw new \Exception('Invalid Groq response: ' . json_encode($data));
+        // Groups & Teams
+        $wcContext .= "## Teams by Group:\n";
+        foreach ($teams->groupBy('group') as $group => $groupTeams) {
+            $wcContext .= "\n### $group\n";
+            foreach ($groupTeams as $team) {
+                $wcContext .= "- {$team->name} (P:{$team->played} W:{$team->wins} D:{$team->draws} L:{$team->losses} Pts:{$team->points})\n";
             }
-
-            $aiResponse = $data['choices'][0]['message']['content'];
-
-            // Store in DB
-            ChatHistory::create([
-                'session_id' => $sessionId,
-                'user_query' => $query,
-                'ai_response' => $aiResponse,
-            ]);
-
-            return response()->json([
-                'response' => $aiResponse,
-                'session_id' => $sessionId
-            ]);
-
-        } catch (\Exception $e) {
-            \Log::error('Chat Error: ' . $e->getMessage());
-            return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
         }
+
+        // Matches
+        $wcContext .= "\n## Upcoming Matches:\n";
+        foreach ($matches->where('status', '!=', 'FINISHED')->take(10) as $match) {
+            $wcContext .= "- {$match->home_team} vs {$match->away_team} ({$match->match_date->format('Y-m-d H:i')}) - {$match->status}\n";
+        }
+
+        // Completed Matches
+        $wcContext .= "\n## Recent Results:\n";
+        foreach ($matches->where('status', 'FINISHED')->take(5) as $match) {
+            $wcContext .= "- {$match->home_team} {$match->home_score}-{$match->away_score} {$match->away_team}\n";
+        }
+
+        $systemPrompt = <<<PROMPT
+You are an expert World Cup 2026 analyst with comprehensive knowledge about:
+- All 48 participating teams and their players
+- Historical World Cup data and statistics
+- Player performance, careers, and current clubs
+- Team tactics, formations, and coaching
+- Match predictions and analysis
+- Venues, dates, and tournament structure
+
+Here is the real-time World Cup 2026 data:
+
+$wcContext
+
+Use this data combined with your extensive knowledge to answer ANY question about World Cup 2026, teams, players, matches, and predictions.
+Be accurate and cite the real-time data when relevant.
+PROMPT;
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
+            'Content-Type' => 'application/json',
+        ])->post('https://api.groq.com/openai/v1/chat/completions', [
+                    'model' => 'llama-3.3-70b-versatile',
+                    'messages' => [
+                        ['role' => 'system', 'content' => $systemPrompt],
+                        ['role' => 'user', 'content' => $query],
+                    ],
+                    'max_tokens' => 1500,
+                ]);
+
+        $aiResponse = $response->json()['choices'][0]['message']['content'];
+
+        ChatHistory::create([
+            'session_id' => $sessionId,
+            'user_query' => $query,
+            'ai_response' => $aiResponse,
+        ]);
+
+        return response()->json([
+            'response' => $aiResponse,
+            'session_id' => $sessionId,
+        ]);
     }
 }
