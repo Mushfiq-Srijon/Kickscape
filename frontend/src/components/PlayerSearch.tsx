@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
+interface Props {
+  onSelectPlayer: (id: number) => void;
+}
+
 interface Player {
   id: number;
   name: string;
@@ -11,7 +15,7 @@ interface Player {
   national_kit_number: number;
 }
 
-export const PlayerSearch = () => {
+export const PlayerSearch = ({ onSelectPlayer }: Props) => {
   const [query, setQuery] = useState('');
   const [teams, setTeams] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState('');
@@ -109,7 +113,7 @@ export const PlayerSearch = () => {
             {results.map((player) => (
               <div
                 key={player.id}
-                onClick={() => setSelectedPlayer(player.id)}
+                onClick={() => onSelectPlayer(player.id)}
                 className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-emerald-500 transition cursor-pointer"
               >
                 <div className="flex justify-between items-start">
