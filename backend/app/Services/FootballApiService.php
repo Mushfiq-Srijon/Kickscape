@@ -59,25 +59,19 @@ class FootballApiService
     // Get team squad (players)
     public function getTeamSquad($teamId)
     {
-        $response = $this->request("teams/{$teamId}");
-        
-        if ($response && isset($response['squad'])) {
-            return $response['squad'];
-        }
-        
-        return [];
+        return $this->request("teams/{$teamId}");
     }
 
     // Search teams by name
     public function searchTeams($name)
     {
         $response = $this->request('competitions/WC');
-        
+
         if (!$response || !isset($response['teams'])) {
             return [];
         }
 
-        return array_filter($response['teams'], function($team) use ($name) {
+        return array_filter($response['teams'], function ($team) use ($name) {
             return stripos($team['name'], $name) !== false;
         });
     }

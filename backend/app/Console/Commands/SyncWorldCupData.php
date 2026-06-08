@@ -56,10 +56,14 @@ class SyncWorldCupData extends Command
             }
         }
 
+        $this->info("Found " . count($teams) . " teams");
+
         // Sync teams
         foreach ($teams as $team) {
+            $this->info("Syncing: {$team['name']} (ID: {$team['id']})");
+
             Team::updateOrCreate(
-                ['api_id' => $team['id']],
+                ['name' => $team['name']],
                 [
                     'api_id' => $team['id'],
                     'name' => $team['name'],
