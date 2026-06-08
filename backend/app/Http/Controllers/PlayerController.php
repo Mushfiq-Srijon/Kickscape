@@ -7,21 +7,66 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    public function searchPlayers(Request $request)
+    // Search players by name
+    public function search(Request $request)
     {
-        $search = $request->query('q');
-        $team = $request->query('team');
-        
-        $query = Player::query();
-        
-        if ($search) {
-            $query->where('name', 'LIKE', "%{$search}%");
+        $query = $request->input('q', '');
+        $team = $request->input('team', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([
+                'message' => 'Search query too short',
+                'players' => []
+            ], 400);
         }
-        
+
+        $players = Player::query();
+
+        // Search by name
+        $players->where('name', 'LIKE', "%{$query}%");
+
+        // Filter by team if provided
         if ($team) {
-            $query->where('team', $team);
+            $players->where('team', $team);
         }
-        
-        return response()->json($query->get());
+
+        $results = $players
+            ->select('id', 'name', 'team', 'country', 'position', 'age', 'national_kit_number')
+            ->limit(20)
+            ->get();
+
+        return response()->json([
+            'total' => count($results),
+            'players' => $results
+        ]);
+    }
+
+    // Get player detail
+    public function detail($id)
+    {
+        $player = Player::find($id);
+
+        if (!$player) {
+            return response()->json([
+                'message' => 'Player not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'player' => $player
+        ]);
+    }
+
+    // Get all teams for filter
+    public function teams()
+    {
+        $teams = Player::distinct()
+            ->pluck('team')
+            ->sort()
+            ->values();
+
+        return response()->json([
+            'teams' => $teams
+        ]);
     }
 }
