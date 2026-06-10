@@ -7,7 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     protected $fillable = [
-        'name', 'country_code', 'played', 'wins', 'draws', 'losses',
-        'goals_for', 'goals_against', 'points', 'group_position', 'group'
+        'name',
+        'country_code',
+        'played',
+        'wins',
+        'draws',
+        'losses',
+        'goals_for',
+        'goals_against',
+        'points',
+        'group_position',
+        'group',
+        'coach',
+        'crest',
+        'tla',
+        'flag',
+        'api_id',
     ];
 }
