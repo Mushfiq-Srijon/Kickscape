@@ -53,7 +53,8 @@ class FootballApiService
     // Get team details
     public function getTeam($teamId)
     {
-        return $this->request("teams/{$teamId}");
+        $url = "{$this->baseUrl}/teams/{$teamId}";
+        return Http::get($url)->json();
     }
 
     // Get team squad (players)

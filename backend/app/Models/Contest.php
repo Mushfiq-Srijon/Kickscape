@@ -7,8 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Contest extends Model
 {
     protected $fillable = [
-        'home_team', 'away_team', 'match_date', 'status', 
-        'home_score', 'away_score', 'group_stage'
+        'home_team',
+        'away_team',
+        'match_date',
+        'status',
+        'home_score',
+        'away_score',
+        'group_stage',
+        'country',
+        'api_id',
     ];
 
     protected $casts = [

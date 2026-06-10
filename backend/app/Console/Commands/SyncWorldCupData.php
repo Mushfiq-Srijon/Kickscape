@@ -19,117 +19,138 @@ class SyncWorldCupData extends Command
 
         $this->info('🔄 Syncing World Cup data...');
 
-        // Sync teams
-        $this->syncTeams($api);
-        $this->info('✅ Teams synced');
+        $this->syncTeamDetails($api);
+        $this->info('✅ Team details synced (crest, flag, tla, country_code, coach)');
 
-        // Sync matches
         $this->syncMatches($api);
         $this->info('✅ Matches synced');
 
-        // Sync standings
         $this->syncStandings($api);
         $this->info('✅ Standings synced');
 
         $this->info('🎉 Sync complete!');
     }
 
-    private function syncTeams($api)
+    // -----------------------------------------------------------------------
+    // Sync crest, flag, tla, country_code, coach for each team individually
+    // football-data.org /teams/{id} returns all these fields
+    // -----------------------------------------------------------------------
+    private function syncTeamDetails($api)
     {
-        $response = $api->getMatches();
+        $teams = Team::whereNotNull('api_id')->get();
 
-        if (!$response || !isset($response['matches'])) {
-            $this->error('Failed to fetch matches');
-            return;
-        }
-
-        $synced = 0;
-        $teams = [];
-
-        // Extract unique teams from matches
-        foreach ($response['matches'] as $match) {
-            if ($match['homeTeam']['name']) {
-                $teams[$match['homeTeam']['id']] = $match['homeTeam'];
-            }
-            if ($match['awayTeam']['name']) {
-                $teams[$match['awayTeam']['id']] = $match['awayTeam'];
-            }
-        }
-
-        $this->info("Found " . count($teams) . " teams");
-
-        // Sync teams
         foreach ($teams as $team) {
-            $this->info("Syncing: {$team['name']} (ID: {$team['id']})");
+            try {
+                sleep(7); // Stay within 10 req/min free tier limit
+                $data = $api->getTeamSquad($team->api_id); // reuses existing getTeamSquad endpoint
 
-            Team::updateOrCreate(
-                ['name' => $team['name']],
-                [
-                    'api_id' => $team['id'],
-                    'name' => $team['name'],
-                    'country_code' => $team['shortName'] ?? substr($team['name'], 0, 3),
-                ]
-            );
-            $synced++;
+                if (!$data || !isset($data['id'])) {
+                    $this->warn("⚠️  No data for {$team->name}");
+                    continue;
+                }
+
+                $updateData = [
+                    'crest'        => $data['crest'] ?? null,
+                    'tla'          => $data['tla'] ?? null,
+                    'country_code' => $data['area']['code'] ?? null,
+                    'flag'         => $data['area']['flag'] ?? null,
+                ];
+
+                // Only update coach if not already manually filled
+                if (empty($team->coach) && isset($data['coach']['name'])) {
+                    $updateData['coach'] = $data['coach']['name'];
+                }
+
+                $team->update($updateData);
+                $this->info("✅ {$team->name}: crest, flag, tla synced");
+
+            } catch (\Exception $e) {
+                $this->error("❌ {$team->name}: " . $e->getMessage());
+            }
         }
-
-        $this->info("✅ Teams synced: $synced");
     }
 
+    // -----------------------------------------------------------------------
+    // Sync matches from WC competition endpoint
+    // -----------------------------------------------------------------------
     private function syncMatches($api)
     {
         $response = $api->getMatches();
+        $matches  = $response['matches'] ?? [];
 
-        if (!$response || !isset($response['matches'])) {
-            $this->error('Failed to fetch matches');
-            return;
+        // Build team name → api_id map for syncing teams on the fly
+        $teamMap = [];
+        foreach ($matches as $match) {
+            if ($match['homeTeam']['name']) {
+                $teamMap[$match['homeTeam']['id']] = $match['homeTeam']['name'];
+            }
+            if ($match['awayTeam']['name']) {
+                $teamMap[$match['awayTeam']['id']] = $match['awayTeam']['name'];
+            }
         }
 
-        $synced = 0;
-        $skipped = 0;
+        // Ensure all teams exist in teams table with api_id
+        foreach ($teamMap as $apiId => $teamName) {
+            Team::firstOrCreate(
+                ['name' => $teamName],
+                ['api_id' => $apiId]
+            );
+        }
 
-        foreach ($response['matches'] as $match) {
-            // Skip if teams are null (knockout rounds not yet determined)
+        foreach ($matches as $match) {
             if (!$match['homeTeam']['name'] || !$match['awayTeam']['name']) {
-                $skipped++;
                 continue;
             }
 
             Contest::updateOrCreate(
                 ['api_id' => $match['id']],
                 [
-                    'home_team' => $match['homeTeam']['name'],
-                    'away_team' => $match['awayTeam']['name'],
-                    'match_date' => $match['utcDate'],
-                    'status' => $match['status'],
-                    'home_score' => $match['score']['fullTime']['home'],
-                    'away_score' => $match['score']['fullTime']['away'],
-                    'group_stage' => $match['stage'] ?? 'Group Stage',
-                    'api_id' => $match['id'],
+                    'home_team'   => $match['homeTeam']['name'],
+                    'away_team'   => $match['awayTeam']['name'],
+                    'match_date'  => $match['utcDate'],
+                    'status'      => $match['status'],
+                    'home_score'  => $match['score']['fullTime']['home'],
+                    'away_score'  => $match['score']['fullTime']['away'],
+                    'group_stage' => $match['group'] ?? null,
+                    'country'     => $match['area']['name'] ?? null,
                 ]
+                // stadium/city intentionally not overwritten here
+                // — managed by update_stadiums.sql
             );
-
-            $synced++;
         }
-
-        $this->info("✅ Matches synced: $synced synced, $skipped skipped (knockout rounds)");
     }
 
+    // -----------------------------------------------------------------------
+    // Sync standings from WC standings endpoint
+    // -----------------------------------------------------------------------
     private function syncStandings($api)
     {
-        // For now, assign groups manually based on team count
-        $groups = ['GROUP_A', 'GROUP_B', 'GROUP_C', 'GROUP_D', 'GROUP_E', 'GROUP_F', 'GROUP_G', 'GROUP_H', 'GROUP_I', 'GROUP_J', 'GROUP_K', 'GROUP_L'];
+        $response = $api->getStandings();
 
-        $teams = Team::all();
-        $teamsPerGroup = ceil($teams->count() / 12);
-
-        foreach ($teams as $index => $team) {
-            $groupIndex = floor($index / $teamsPerGroup);
-            $group = $groups[$groupIndex] ?? 'GROUP_A';
-
-            $team->update(['group' => $group]);
+        if (!$response || !isset($response['standings'])) {
+            $this->warn('⚠️  No standings data available yet');
+            return;
         }
 
-        $this->info("✅ Groups assigned to teams");
+        foreach ($response['standings'] as $standing) {
+            $group = $standing['group'] ?? null;
+
+            foreach ($standing['table'] as $position => $entry) {
+                $teamName = $entry['team']['name'] ?? null;
+                if (!$teamName) continue;
+
+                Team::where('name', $teamName)->update([
+                    'group'          => $group,
+                    'group_position' => $position + 1,
+                    'played'         => $entry['playedGames'] ?? 0,
+                    'wins'           => $entry['won'] ?? 0,
+                    'draws'          => $entry['draw'] ?? 0,
+                    'losses'         => $entry['lost'] ?? 0,
+                    'goals_for'      => $entry['goalsFor'] ?? 0,
+                    'goals_against'  => $entry['goalsAgainst'] ?? 0,
+                    'points'         => $entry['points'] ?? 0,
+                ]);
+            }
+        }
     }
 }
