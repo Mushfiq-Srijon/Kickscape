@@ -85,7 +85,7 @@ export const PlayerDetail = ({ id }: Props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/players/${id}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/players/${id}`)
       .then((res) => {
         setPlayer(res.data.player);
         setWiki(res.data.wiki ?? null);
