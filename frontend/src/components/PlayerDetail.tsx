@@ -2,200 +2,214 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 interface Player {
-    id: number;
-    name: string;
-    team: string;
-    position: string;
-    age: number | null;
-    height: number | null;
-    strong_foot: string | null;
-    national_kit_number: number | null;
-    club_name: string | null;
-    date_of_birth: string | null;
-    goals: number;
-    assists: number;
-    appearances: number;
-    yellow_cards: number;
-    red_cards: number;
-    bio: string | null;
+  id: number;
+  name: string;
+  team: string;
+  position: string;
+  age: number | null;
+  height: number | null;
+  strong_foot: string | null;
+  national_kit_number: number | null;
+  club_name: string | null;
+  date_of_birth: string | null;
+  goals: number;
+  assists: number;
+  appearances: number;
+  yellow_cards: number;
+  red_cards: number;
+  bio: string | null;
 }
 
 interface WikiData {
-    title: string;
-    extract: string;
-    image: string | null;
-    url: string | null;
+  title: string;
+  extract: string;
+  image: string | null;
+  url: string | null;
 }
 
 interface Props {
-    id: number;
+  id: number;
 }
 
 const StatRow = ({ label, value }: { label: string; value: string | number | null }) => (
-    <div className="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
-        <span className="text-gray-400 text-sm">{label}</span>
-        <span className="text-white font-semibold">{value ?? 'N/A'}</span>
-    </div>
+  <div style={{
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
+  }}>
+    <span style={{ fontSize: 'clamp(11px, 2vw, 13px)', color: '#555566' }}>{label}</span>
+    <span style={{ fontSize: 'clamp(12px, 2vw, 14px)', fontWeight: 600, color: '#f0ede4' }}>{value ?? 'N/A'}</span>
+  </div>
 );
 
-const CardBadge = ({ count, type }: { count: number; type: 'yellow' | 'red' }) => {
-    const bg = type === 'yellow' ? 'bg-yellow-400' : 'bg-red-500';
-    return (
-        <div className="flex items-center gap-2">
-            <div className={`w-4 h-5 ${bg} rounded-sm shadow`} />
-            <span className="text-white font-bold text-lg">{count}</span>
-        </div>
-    );
+const CardBadge = ({ count, type }: { count: number; type: 'yellow' | 'red' }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div style={{
+      width: 14, height: 18, borderRadius: 2,
+      background: type === 'yellow' ? '#facc15' : '#f87171',
+    }} />
+    <span style={{ fontSize: 'clamp(12px, 3vw, 16px)', fontWeight: 700, color: '#f0ede4' }}>{count}</span>
+  </div>
+);
+
+const card: React.CSSProperties = {
+  background: 'rgba(16, 16, 26, 0.85)',
+  border: '1px solid rgba(212, 175, 55, 0.15)',
+  borderRadius: 12,
+  padding: 'clamp(1rem, 3vw, 1.5rem)',
+};
+
+const sectionLabel: React.CSSProperties = {
+  fontWeight: 700,
+  letterSpacing: '0.15em',
+  color: '#d4af37',
+  textTransform: 'uppercase',
+  marginBottom: 16,
+  fontFamily: "'Bebas Neue', sans-serif",
+  fontSize: 'clamp(13px, 2vw, 15px)',
+};
+
+const positionLabel = (pos: string | null) => {
+  const map: Record<string, string> = {
+    GK: 'Goalkeeper', CB: 'Centre-Back', LB: 'Left-Back',
+    RB: 'Right-Back', CM: 'Central Midfielder', LM: 'Left Midfielder',
+    RM: 'Right Midfielder', CAM: 'Attacking Midfielder',
+    CDM: 'Defensive Midfielder', LW: 'Left Winger', RW: 'Right Winger',
+    ST: 'Striker', CF: 'Centre-Forward',
+  };
+  return pos ? (map[pos] ?? pos) : 'N/A';
 };
 
 export const PlayerDetail = ({ id }: Props) => {
-    const [player, setPlayer] = useState<Player | null>(null);
-    const [wiki, setWiki] = useState<WikiData | null>(null);
-    const [loading, setLoading] = useState(true);
+  const [player, setPlayer] = useState<Player | null>(null);
+  const [wiki, setWiki] = useState<WikiData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchPlayer = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8000/api/players/${id}`);
-                setPlayer(res.data.player);
-                setWiki(res.data.wiki ?? null);
-            } catch (err) {
-                console.error('Error fetching player:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    axios.get(`http://localhost:8000/api/players/${id}`)
+      .then((res) => {
+        setPlayer(res.data.player);
+        setWiki(res.data.wiki ?? null);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [id]);
 
-        fetchPlayer();
-    }, [id]);
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-96">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
-            </div>
-        );
-    }
-
-    if (!player) {
-        return (
-            <div className="text-center py-12 text-gray-400">
-                <p>Player not found</p>
-            </div>
-        );
-    }
-
-    const formatHeight = (h: number | null) =>
-        h ? `${h.toFixed(2)} m` : 'N/A';
-
-    const formatDOB = (dob: string | null) => {
-        if (!dob) return 'N/A';
-        return new Date(dob).toLocaleDateString('en-GB', {
-            day: 'numeric', month: 'long', year: 'numeric',
-        });
-    };
-
-    const positionLabel = (pos: string | null) => {
-        const map: Record<string, string> = {
-            GK: 'Goalkeeper', CB: 'Centre-Back', LB: 'Left-Back',
-            RB: 'Right-Back', CM: 'Central Midfielder', LM: 'Left Midfielder',
-            RM: 'Right Midfielder', CAM: 'Attacking Midfielder',
-            CDM: 'Defensive Midfielder', LW: 'Left Winger', RW: 'Right Winger',
-            ST: 'Striker', CF: 'Centre-Forward',
-        };
-        return pos ? (map[pos] ?? pos) : 'N/A';
-    };
-
+  if (loading) {
     return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-
-            {/* ── Header ── */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-8">
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
-                    <div className="flex-1">
-                        <h1 className="text-4xl font-bold text-white mb-1">{player.name}</h1>
-                        <p className="text-emerald-400 text-lg mb-1">{player.team}</p>
-                        {player.club_name && (
-                            <p className="text-gray-500 text-sm">Club: {player.club_name}</p>
-                        )}
-                    </div>
-
-                    {/* Kit number badge */}
-                    {player.national_kit_number && (
-                        <div className="text-center">
-                            <p className="text-gray-400 text-xs mb-2 uppercase tracking-wider">National Kit</p>
-                            <div className="w-16 h-20 bg-emerald-600 text-white text-3xl flex items-center justify-center rounded-lg font-bold shadow-lg">
-                                {player.national_kit_number}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* ── Wikipedia Bio ── */}
-            {wiki && wiki.extract && (
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-4">About</h3>
-                    <div className="flex gap-5">
-                        {wiki.image && (
-                            <img
-                                src={wiki.image}
-                                alt={player.name}
-                                className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
-                            />
-                        )}
-                        <div>
-                            <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">
-                                {wiki.extract}
-                            </p>
-                            {wiki.url && (
-                                <a
-                                    href={wiki.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-emerald-400 hover:text-emerald-300 text-sm mt-3 inline-block"
-                                >
-                                    Full biography on Wikipedia →
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                {/* ── Player Info ── */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-4">Player Info</h3>
-                    <StatRow label="Position" value={positionLabel(player.position)} />
-                    <StatRow label="Date of Birth" value={formatDOB(player.date_of_birth)} />
-                    <StatRow label="Age" value={player.age} />
-                    <StatRow label="Height" value={formatHeight(player.height)} />
-                    <StatRow label="Strong Foot" value={player.strong_foot ? player.strong_foot.charAt(0).toUpperCase() + player.strong_foot.slice(1) : null} />
-                </div>
-
-                {/* ── FIFA World Cup 2026 Stats ── */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-4">
-                        FIFA World Cup 2026
-                    </h3>
-                    <StatRow label="Appearances" value={player.appearances} />
-                    <StatRow label="Goals" value={player.goals} />
-                    <StatRow label="Assists" value={player.assists} />
-
-                    {/* Cards — shown with actual card visuals */}
-                    <div className="flex justify-between items-center py-2 border-b border-white/5">
-                        <span className="text-gray-400 text-sm">Yellow Cards</span>
-                        <CardBadge count={player.yellow_cards} type="yellow" />
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-400 text-sm">Red Cards</span>
-                        <CardBadge count={player.red_cards} type="red" />
-                    </div>
-                </div>
-            </div>
-
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 320 }}>
+        <div style={{
+          width: 44, height: 44, borderRadius: '50%',
+          border: '2px solid transparent', borderTopColor: '#d4af37',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
     );
+  }
+
+  if (!player) {
+    return <div style={{ textAlign: 'center', padding: '4rem', color: '#555566' }}>Player not found</div>;
+  }
+
+  const formatHeight = (h: number | null) => h ? `${h.toFixed(2)} m` : 'N/A';
+  const formatDOB = (dob: string | null) => {
+    if (!dob) return 'N/A';
+    return new Date(dob).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', maxWidth: 900, margin: '0 auto' }}>
+
+      {/* Header */}
+      <div style={card}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, flexDirection: window.innerWidth < 480 ? 'column' : 'row' }}>
+          <div style={{ flex: 1 }}>
+            <h1 style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 'clamp(32px, 8vw, 48px)', letterSpacing: '0.05em',
+              color: '#f0ede4', lineHeight: 1, marginBottom: 6,
+            }}>
+              {player.name}
+            </h1>
+            <p style={{ color: '#d4af37', fontSize: 'clamp(14px, 3vw, 16px)', fontWeight: 600, marginBottom: 4 }}>{player.team}</p>
+            {player.club_name && (
+              <p style={{ color: '#555566', fontSize: 'clamp(11px, 2vw, 13px)' }}>Club: {player.club_name}</p>
+            )}
+          </div>
+
+          {player.national_kit_number && (
+            <div style={{ textAlign: 'center', flexShrink: 0, alignSelf: 'flex-start' }}>
+              <p style={{ fontSize: 10, color: '#555566', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 6 }}>
+                Kit No.
+              </p>
+              <div style={{
+                width: 'clamp(40px, 15vw, 60px)', height: 'clamp(48px, 20vw, 72px)',
+                background: 'linear-gradient(135deg, #d4af37, #a88b28)',
+                borderRadius: 8,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: 'clamp(24px, 6vw, 34px)', color: '#08080e', fontWeight: 400,
+              }}>
+                {player.national_kit_number}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Wikipedia Bio */}
+      {wiki && wiki.extract && (
+        <div style={card}>
+          <p style={sectionLabel}>About</p>
+          <div style={{ display: 'flex', gap: 16, flexDirection: window.innerWidth < 480 ? 'column' : 'row' }}>
+            {wiki.image && (
+              <img src={wiki.image} alt={player.name}
+                style={{ width: 'clamp(80px, 30vw, 100px)', height: 'clamp(80px, 30vw, 100px)', objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
+            )}
+            <div>
+              <p style={{ fontSize: 'clamp(12px, 2vw, 14px)', color: '#8b8b9e', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {wiki.extract}
+              </p>
+              {wiki.url && (
+                <a href={wiki.url} target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#d4af37', fontSize: 'clamp(11px, 2vw, 13px)', display: 'inline-block', marginTop: 10, textDecoration: 'none', opacity: 0.85 }}>
+                  Full biography on Wikipedia →
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(250px, 100%, 300px), 1fr))', gap: '1.25rem' }}>
+
+        {/* Player Info */}
+        <div style={card}>
+          <p style={sectionLabel}>Player Info</p>
+          <StatRow label="Position" value={positionLabel(player.position)} />
+          <StatRow label="Date of Birth" value={formatDOB(player.date_of_birth)} />
+          <StatRow label="Age" value={player.age} />
+          <StatRow label="Height" value={formatHeight(player.height)} />
+          <StatRow label="Strong Foot" value={player.strong_foot ? player.strong_foot.charAt(0).toUpperCase() + player.strong_foot.slice(1) : null} />
+        </div>
+
+        {/* WC Stats */}
+        <div style={card}>
+          <p style={sectionLabel}>FIFA World Cup 2026</p>
+          <StatRow label="Appearances" value={player.appearances} />
+          <StatRow label="Goals" value={player.goals} />
+          <StatRow label="Assists" value={player.assists} />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+            <span style={{ fontSize: 13, color: '#555566' }}>Yellow Cards</span>
+            <CardBadge count={player.yellow_cards} type="yellow" />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
+            <span style={{ fontSize: 13, color: '#555566' }}>Red Cards</span>
+            <CardBadge count={player.red_cards} type="red" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
