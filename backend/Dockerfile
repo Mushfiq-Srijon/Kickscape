@@ -14,11 +14,13 @@ WORKDIR /var/www
 # Copy project
 COPY . .
 
+# Create required directories and set permissions BEFORE composer install
+RUN mkdir -p bootstrap/cache storage/framework/sessions \
+    storage/framework/views storage/framework/cache storage/logs \
+    && chmod -R 775 bootstrap/cache storage
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
-
-# Set permissions
-RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
