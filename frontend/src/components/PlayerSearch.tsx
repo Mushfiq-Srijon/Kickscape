@@ -34,7 +34,6 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [results, setResults] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
-  const [popularLoaded, setPopularLoaded] = useState(false);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/players/teams`)
@@ -66,7 +65,7 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/players/popular`);
         setResults(Array.isArray(res.data.players) ? res.data.players : []);
       } catch (err) { console.error(err); }
-      finally { setLoading(false); setPopularLoaded(true); }
+      finally { setLoading(false); }
     };
     loadPopular();
   }, [query, selectedTeam]);
