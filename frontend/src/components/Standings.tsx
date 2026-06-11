@@ -57,7 +57,10 @@ export const Standings = () => {
 
   useEffect(() => {
     getTeamStandings()
-      .then((res) => setTeams(res.data))
+      .then((res) => {
+        const teams = Array.isArray(res.data) ? res.data : [];
+        setTeams(teams);
+      })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
