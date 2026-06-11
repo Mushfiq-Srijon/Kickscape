@@ -34,6 +34,7 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [results, setResults] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
+  const [popularLoaded, setPopularLoaded] = useState(false);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/players/teams`)
@@ -55,6 +56,37 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
     }, 300);
     return () => clearTimeout(timer);
   }, [query, selectedTeam]);
+
+  // Load popular players when page is idle and no query/team selected
+  useEffect(() => {
+    const loadPopular = async () => {
+      if (query.length > 0 || selectedTeam) return;
+      try {
+        setLoading(true);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/players/popular`);
+        setResults(Array.isArray(res.data.players) ? res.data.players : []);
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); setPopularLoaded(true); }
+    };
+    loadPopular();
+  }, [query, selectedTeam]);
+
+  // When a team is selected and query is short, fetch team players
+  useEffect(() => {
+    const loadTeamPlayers = async () => {
+      if (!selectedTeam) return;
+      if (query.length >= 2) return; // search effect handles this
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        params.append('team', selectedTeam);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/players/search?${params}`);
+        setResults(Array.isArray(res.data.players) ? res.data.players : []);
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
+    };
+    loadTeamPlayers();
+  }, [selectedTeam]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

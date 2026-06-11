@@ -145,12 +145,12 @@ export const Schedule = () => {
         </div>
 
         {/* Teams + Score - Stack on mobile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 12px)', flexDirection: window.innerWidth < 480 ? 'column' : 'row' }}>
-          <div style={{ flex: 1, width: '100%', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 12px)', flexDirection: window.innerWidth < 480 ? 'column' : 'row', width: '100%' }}>
+          <div style={{ flex: 1, width: '100%', minWidth: 0, display: 'flex', alignItems: 'center' }}>
             <TeamDisplay name={match.home_team} meta={teamMeta[match.home_team]} align="left" />
           </div>
 
-          <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 'max-content', order: window.innerWidth < 480 ? -1 : 0 }}>
+          <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 'max-content', order: window.innerWidth < 480 ? -1 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isFinished ? (
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(20px, 8vw, 32px)', letterSpacing: '0.05em', color: '#f0ede4', whiteSpace: 'nowrap' }}>
                 {match.home_score} <span style={{ color: '#555566', fontSize: 'clamp(14px, 6vw, 22px)' }}>–</span> {match.away_score}
@@ -164,7 +164,7 @@ export const Schedule = () => {
             )}
           </div>
 
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', width: '100%', minWidth: 0 }}>
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', width: '100%', minWidth: 0, alignItems: 'center' }}>
             <TeamDisplay name={match.away_team} meta={teamMeta[match.away_team]} align="right" />
           </div>
         </div>
