@@ -85,7 +85,7 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
       finally { setLoading(false); }
     };
     loadTeamPlayers();
-  }, [selectedTeam]);
+  }, [selectedTeam, query]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
