@@ -13,6 +13,7 @@ Route::post('/chat', [ChatController::class, 'askChatBot']);
 
 Route::prefix('players')->group(function () {
     Route::get('/search', [PlayerController::class, 'search']);
+    Route::get('/popular', [PlayerController::class, 'popular']);
     Route::get('/teams', [PlayerController::class, 'teams']);
     Route::get('/{id}', [PlayerController::class, 'detail']);
 });

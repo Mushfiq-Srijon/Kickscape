@@ -13,8 +13,22 @@ class PlayerController extends Controller
     {
         $query = $request->input('q', '');
         $team  = $request->input('team', '');
-
+        // Allow team-only lookup (when q is short) and normal search when q >= 2
         if (strlen($query) < 2) {
+            if ($team) {
+                $results = Player::query()
+                    ->where('team', $team)
+                    ->select('id', 'name', 'team', 'position')
+                    ->orderBy('name')
+                    ->limit(200)
+                    ->get();
+
+                return response()->json([
+                    'total' => $results->count(),
+                    'players' => $results,
+                ]);
+            }
+
             return response()->json([
                 'message' => 'Search query too short',
                 'players' => []
@@ -29,11 +43,31 @@ class PlayerController extends Controller
         $results = $players
             ->select('id', 'name', 'team', 'position')
             ->orderBy('name')
-            ->limit(20)
+            ->limit(200)
             ->get();
 
         return response()->json([
             'total'   => $results->count(),
+            'players' => $results,
+        ]);
+    }
+
+    public function popular()
+    {
+        // A short curated list of popular players to show by default
+        $popularNames = [
+            'Lionel Messi','Cristiano Ronaldo','Neymar','Kylian Mbappé','Kevin De Bruyne','Luka Modrić','Sergio Ramos','Karim Benzema','Erling Haaland','Harry Kane','Mohamed Salah','Robert Lewandowski','Sadio Mané','Raheem Sterling','Antoine Griezmann','Eden Hazard','Paul Pogba','Zlatan Ibrahimović','Gareth Bale','Luis Suárez','Neymar Jr','Phil Foden','Bruno Fernandes','Jadon Sancho','Thiago Silva','Diego Maradona'
+        ];
+
+        $results = Player::query()
+            ->whereIn('name', $popularNames)
+            ->select('id', 'name', 'team', 'position')
+            ->orderBy('name')
+            ->limit(30)
+            ->get();
+
+        return response()->json([
+            'total' => $results->count(),
             'players' => $results,
         ]);
     }
