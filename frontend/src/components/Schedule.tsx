@@ -23,12 +23,12 @@ interface TeamMeta {
 
 const getStatusStyle = (status: string): React.CSSProperties => {
   switch (status) {
-    case 'FINISHED':   return { background: 'rgba(74,222,128,0.1)', color: '#4ade80' };
+    case 'FINISHED': return { background: 'rgba(74,222,128,0.1)', color: '#4ade80' };
     case 'IN_PLAY':
-    case 'LIVE':       return { background: 'rgba(248,113,113,0.12)', color: '#f87171' };
+    case 'LIVE': return { background: 'rgba(248,113,113,0.12)', color: '#f87171' };
     case 'TIMED':
-    case 'SCHEDULED':  return { background: 'rgba(212,175,55,0.1)', color: '#d4af37' };
-    default:           return { background: 'rgba(255,255,255,0.06)', color: '#8b8b9e' };
+    case 'SCHEDULED': return { background: 'rgba(212,175,55,0.1)', color: '#d4af37' };
+    default: return { background: 'rgba(255,255,255,0.06)', color: '#8b8b9e' };
   }
 };
 
@@ -36,10 +36,10 @@ const getStatusLabel = (status: string) => {
   switch (status) {
     case 'TIMED':
     case 'SCHEDULED': return 'Upcoming';
-    case 'FINISHED':  return 'FT';
+    case 'FINISHED': return 'FT';
     case 'IN_PLAY':
-    case 'LIVE':      return '● Live';
-    default:          return status;
+    case 'LIVE': return '● Live';
+    default: return status;
   }
 };
 
@@ -76,9 +76,11 @@ export const Schedule = () => {
   useEffect(() => {
     Promise.all([getMatches(''), getTeamStandings()])
       .then(([matchRes, teamRes]) => {
-        setMatches(matchRes.data);
+        const matches = Array.isArray(matchRes.data) ? matchRes.data : [];
+        const teams = Array.isArray(teamRes.data) ? teamRes.data : [];
+        setMatches(matches);
         const meta: Record<string, TeamMeta> = {};
-        (teamRes.data as TeamMeta[]).forEach((t) => { meta[t.name] = t; });
+        teams.forEach((t: TeamMeta) => { meta[t.name] = t; });
         setTeamMeta(meta);
       })
       .catch(console.error)
