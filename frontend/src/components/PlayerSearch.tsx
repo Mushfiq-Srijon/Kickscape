@@ -37,7 +37,7 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/players/teams`)
-      .then((res) => setTeams(res.data.teams))
+      .then((res) => setTeams(Array.isArray(res.data.teams) ? res.data.teams : []))
       .catch(console.error);
   }, []);
 
@@ -49,7 +49,7 @@ export const PlayerSearch = ({ onSelectPlayer }: Props) => {
         const params = new URLSearchParams({ q: query });
         if (selectedTeam) params.append('team', selectedTeam);
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/players/search?${params}`);
-        setResults(res.data.players);
+        setResults(Array.isArray(res.data.players) ? res.data.players : []);
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }, 300);
