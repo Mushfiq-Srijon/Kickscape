@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface Props {
@@ -15,247 +15,170 @@ interface Player {
   national_kit_number: number;
 }
 
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  padding: '12px 16px',
+  background: 'rgba(16, 16, 26, 0.9)',
+  border: '1px solid rgba(212, 175, 55, 0.2)',
+  borderRadius: 8,
+  color: '#f0ede4',
+  fontSize: 14,
+  fontFamily: 'Inter, sans-serif',
+  outline: 'none',
+  transition: 'border-color 0.15s',
+};
+
 export const PlayerSearch = ({ onSelectPlayer }: Props) => {
   const [query, setQuery] = useState('');
   const [teams, setTeams] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState('');
   const [results, setResults] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
 
-  // Fetch teams on mount
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const res = await axios.get('http://localhost:8000/api/players/teams');
-        setTeams(res.data.teams);
-      } catch (err) {
-        console.error('Error fetching teams:', err);
-      }
-    };
-
-    fetchTeams();
+    axios.get('http://localhost:8000/api/players/teams')
+      .then((res) => setTeams(res.data.teams))
+      .catch(console.error);
   }, []);
 
-  // Debounced search
   useEffect(() => {
-    if (query.length < 2) {
-      setResults([]);
-      return;
-    }
-
+    if (query.length < 2) { setResults([]); return; }
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        params.append('q', query);
-        if (selectedTeam) {
-          params.append('team', selectedTeam);
-        }
-
-        const res = await axios.get(
-          `http://localhost:8000/api/players/search?${params.toString()}`
-        );
+        const params = new URLSearchParams({ q: query });
+        if (selectedTeam) params.append('team', selectedTeam);
+        const res = await axios.get(`http://localhost:8000/api/players/search?${params}`);
         setResults(res.data.players);
-      } catch (err) {
-        console.error('Error searching players:', err);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
     }, 300);
-
     return () => clearTimeout(timer);
   }, [query, selectedTeam]);
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-white">Player Search</h2>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(24px, 6vw, 30px)', letterSpacing: '0.1em', color: '#f0ede4' }}>
+        Player Search
+      </h2>
 
-      {/* Search & Filter */}
-      <div className="space-y-4">
-        {/* Search Input */}
+      {/* Search + Filter */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <input
           type="text"
           placeholder="Search player name (min 2 chars)..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 transition"
+          style={{ ...inputStyle, fontSize: 'clamp(12px, 2vw, 14px)', padding: 'clamp(10px, 2vw, 12px) clamp(12px, 3vw, 16px)' }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = '#d4af37')}
+          onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)')}
         />
-
-        {/* Team Filter */}
         <select
           value={selectedTeam}
           onChange={(e) => setSelectedTeam(e.target.value)}
-          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-emerald-500 transition"
+          style={{ ...inputStyle, cursor: 'pointer', fontSize: 'clamp(12px, 2vw, 14px)', padding: 'clamp(10px, 2vw, 12px) clamp(12px, 3vw, 16px)' }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = '#d4af37')}
+          onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(212,175,55,0.2)')}
         >
           <option value="">All Teams</option>
           {teams.map((team) => (
-            <option key={team} value={team}>
-              {team}
-            </option>
+            <option key={team} value={team} style={{ background: '#10101a' }}>{team}</option>
           ))}
         </select>
       </div>
 
-      {/* Loading State */}
+      {/* Loading */}
       {loading && (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: '50%',
+            border: '2px solid transparent', borderTopColor: '#d4af37',
+            animation: 'spin 0.8s linear infinite',
+          }} />
         </div>
       )}
 
       {/* Results */}
       {!loading && results.length > 0 && (
-        <div className="space-y-3">
-          <p className="text-sm text-gray-400">Found {results.length} players</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <p style={{ fontSize: 12, color: '#555566', letterSpacing: '0.05em' }}>
+            {results.length} player{results.length !== 1 ? 's' : ''} found
+          </p>
 
-          <div className="space-y-2">
-            {results.map((player) => (
-              <div
-                key={player.id}
-                onClick={() => onSelectPlayer(player.id)}
-                className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-emerald-500 transition cursor-pointer"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold text-white">{player.name}</h3>
-                    <p className="text-sm text-gray-400">
-                      {player.team} • {player.position}
-                    </p>
-                    {player.age && (
-                      <p className="text-xs text-gray-500">Age: {player.age}</p>
-                    )}
-                  </div>
-                  <div className="text-right">
-                    {player.national_kit_number && (
-                      <div className="w-8 h-10 bg-emerald-500 text-white text-xs flex items-center justify-center rounded font-bold">
-                        {player.national_kit_number}
-                      </div>
-                    )}
-                  </div>
-                </div>
+          {results.map((player) => (
+            <div
+              key={player.id}
+              onClick={() => onSelectPlayer(player.id)}
+              style={{
+                padding: 'clamp(10px, 2vw, 14px) clamp(12px, 3vw, 16px)',
+                background: 'rgba(16, 16, 26, 0.85)',
+                border: '1px solid rgba(212, 175, 55, 0.12)',
+                borderRadius: 10,
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                transition: 'border-color 0.15s, background 0.15s',
+                gap: 12,
+                flexWrap: 'wrap',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.4)';
+                e.currentTarget.style.background = 'rgba(212,175,55,0.06)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212,175,55,0.12)';
+                e.currentTarget.style.background = 'rgba(16,16,26,0.85)';
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 600, color: '#f0ede4', marginBottom: 3, wordBreak: 'break-word' }}>{player.name}</p>
+                <p style={{ fontSize: 'clamp(11px, 2vw, 13px)', color: '#8b8b9e' }}>
+                  {player.team} · {player.position}
+                  {player.age ? <span style={{ color: '#555566' }}> · Age {player.age}</span> : null}
+                </p>
               </div>
-            ))}
-          </div>
+              {player.national_kit_number && (
+                <div style={{
+                  width: 32, height: 38,
+                  background: 'linear-gradient(135deg, #d4af37, #a88b28)',
+                  borderRadius: 5,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: 16, color: '#08080e',
+                  flexShrink: 0,
+                }}>
+                  {player.national_kit_number}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
-      {/* No Results */}
+      {/* No results */}
       {!loading && query.length >= 2 && results.length === 0 && (
-        <div className="text-center py-8 text-gray-400">
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#555566', fontSize: 14 }}>
           No players found for "{query}"
         </div>
       )}
 
-      {/* Empty State */}
+      {/* Empty */}
       {query.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
-          Start typing to search for players...
+        <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#555566' }}>
+          <div style={{
+            fontSize: 'clamp(28px, 10vw, 40px)', marginBottom: 12,
+            fontFamily: "'Bebas Neue', sans-serif",
+            color: 'rgba(212,175,55,0.15)',
+            letterSpacing: '0.1em',
+          }}>
+            SEARCH PLAYERS
+          </div>
+          <p style={{ fontSize: 'clamp(12px, 2vw, 14px)' }}>Start typing to find players from all 48 nations</p>
         </div>
       )}
 
-      {/* Selected Player Detail (Preview) */}
-      {selectedPlayer && (
-        <PlayerDetailPreview playerId={selectedPlayer} />
-      )}
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
-
-// Player Detail Preview Component
-function PlayerDetailPreview({ playerId }: { playerId: number }) {
-  const [player, setPlayer] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPlayer = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:8000/api/players/${playerId}`
-        );
-        setPlayer(res.data.player);
-      } catch (err) {
-        console.error('Error fetching player:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlayer();
-  }, [playerId]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-4">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-500"></div>
-      </div>
-    );
-  }
-
-  if (!player) return null;
-
-  return (
-    <div className="p-6 bg-white/5 border border-emerald-500/30 rounded-lg space-y-4">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-xl font-bold text-white">{player.name}</h3>
-          <p className="text-emerald-400">{player.team}</p>
-        </div>
-        {player.national_kit_number && (
-          <div className="w-12 h-16 bg-emerald-500 text-white text-lg flex items-center justify-center rounded font-bold">
-            {player.national_kit_number}
-          </div>
-        )}
-      </div>
-
-      {/* Player Stats Grid */}
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="bg-white/5 p-2 rounded">
-          <p className="text-gray-400">Position</p>
-          <p className="text-white font-semibold">{player.position}</p>
-        </div>
-        <div className="bg-white/5 p-2 rounded">
-          <p className="text-gray-400">Age</p>
-          <p className="text-white font-semibold">{player.age || 'N/A'}</p>
-        </div>
-        <div className="bg-white/5 p-2 rounded">
-          <p className="text-gray-400">Height</p>
-          <p className="text-white font-semibold">
-            {player.height ? `${player.height}m` : 'N/A'}
-          </p>
-        </div>
-        <div className="bg-white/5 p-2 rounded">
-          <p className="text-gray-400">Club Kit #</p>
-          <p className="text-white font-semibold">
-            {player.club_kit_number || 'N/A'}
-          </p>
-        </div>
-      </div>
-
-      {/* Stats Preview */}
-      <div className="space-y-2">
-        <p className="text-sm text-gray-400">Player Stats</p>
-        <div className="space-y-1">
-          {['striking', 'defending', 'speed', 'passing', 'dribbling', 'physical'].map(
-            (stat) => (
-              <div key={stat} className="flex items-center gap-2">
-                <span className="text-xs text-gray-400 w-20 capitalize">
-                  {stat}
-                </span>
-                <div className="flex-1 bg-white/10 rounded-full h-2">
-                  <div
-                    className="bg-emerald-500 h-2 rounded-full"
-                    style={{ width: `${(player[stat] / 100) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-xs text-white w-8 text-right">
-                  {player[stat]}
-                </span>
-              </div>
-            )
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
