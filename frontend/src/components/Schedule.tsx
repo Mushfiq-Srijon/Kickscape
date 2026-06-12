@@ -43,26 +43,33 @@ const getStatusLabel = (status: string) => {
   }
 };
 
-const TeamDisplay = ({ name, meta, align }: { name: string; meta: TeamMeta | undefined; align: 'left' | 'right' }) => {
+const TeamDisplay = ({
+  name,
+  meta,
+  align,
+}: {
+  name: string;
+  meta: TeamMeta | undefined;
+  align: 'left' | 'right';
+}) => {
   const [imgError, setImgError] = React.useState(false);
   const src = !imgError && meta?.crest ? meta.crest : meta?.flag ?? null;
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(6px, 1.5vw, 10px)', flexDirection: align === 'right' ? 'row-reverse' : 'row', minWidth: 0, flex: 1, overflow: 'hidden' }}>
+    <div className={`sch-team sch-team--${align}`}>
       {src ? (
-        <img src={src} alt={name} style={{ width: 'clamp(20px, 5vw, 28px)', height: 'clamp(20px, 5vw, 28px)', objectFit: 'contain', flexShrink: 0 }}
-          onError={() => setImgError(true)} />
+        <img
+          src={src}
+          alt={name}
+          className="sch-team__crest"
+          onError={() => setImgError(true)}
+        />
       ) : (
-        <div style={{
-          width: 'clamp(20px, 5vw, 28px)', height: 'clamp(20px, 5vw, 28px)', borderRadius: '50%',
-          background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.2)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 'clamp(8px, 1.5vw, 10px)', color: '#d4af37', fontWeight: 700, flexShrink: 0,
-        }}>
+        <div className="sch-team__fallback">
           {name.slice(0, 2).toUpperCase()}
         </div>
       )}
-      <span style={{ fontSize: 'clamp(12px, 2.5vw, 14px)', fontWeight: 600, color: '#f0ede4', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+      <span className="sch-team__name">{name}</span>
     </div>
   );
 };
@@ -94,7 +101,9 @@ export const Schedule = () => {
       if (!grouped[key]) grouped[key] = [];
       grouped[key].push(m);
     });
-    return Object.fromEntries(Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)));
+    return Object.fromEntries(
+      Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b))
+    );
   };
 
   const groupByDate = (ms: Match[]) => {
@@ -107,7 +116,9 @@ export const Schedule = () => {
       grouped[date].push(m);
     });
     return Object.fromEntries(
-      Object.entries(grouped).sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
+      Object.entries(grouped).sort(
+        ([a], [b]) => new Date(a).getTime() - new Date(b).getTime()
+      )
     );
   };
 
@@ -118,66 +129,62 @@ export const Schedule = () => {
     const isLive = match.status === 'IN_PLAY' || match.status === 'LIVE';
 
     return (
-      <div style={{
-        background: 'rgba(16, 16, 26, 0.85)',
-        border: '1px solid rgba(212, 175, 55, 0.12)',
-        borderRadius: 12,
-        padding: 'clamp(0.75rem, 3vw, 1.25rem)',
-        transition: 'border-color 0.15s',
-      }}
-        onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(212,175,55,0.3)')}
-        onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(212,175,55,0.12)')}
-      >
+      <div className="sch-card">
         {/* Status row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
-          <span style={{
-            fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
-            padding: '3px 10px', borderRadius: 20,
-            ...getStatusStyle(match.status),
-          }}>
+        <div className="sch-card__top">
+          <span
+            className="sch-card__status"
+            style={getStatusStyle(match.status)}
+          >
             {getStatusLabel(match.status)}
           </span>
           {viewMode === 'group' && match.group_stage && (
-            <span style={{ fontSize: 11, color: '#555566', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <span className="sch-card__group">
               {match.group_stage.replace('GROUP_', 'Group ')}
             </span>
           )}
         </div>
 
-        {/* Teams + Score - Stack on mobile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 12px)', flexDirection: window.innerWidth < 480 ? 'column' : 'row', width: '100%' }}>
-          <div style={{ flex: 1, width: '100%', minWidth: 0, display: 'flex', alignItems: 'center' }}>
+        {/* Teams + Score */}
+        <div className="sch-card__matchrow">
+          <div className="sch-card__side sch-card__side--home">
             <TeamDisplay name={match.home_team} meta={teamMeta[match.home_team]} align="left" />
           </div>
 
-          <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 'max-content', order: window.innerWidth < 480 ? -1 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="sch-card__score">
             {isFinished ? (
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(20px, 8vw, 32px)', letterSpacing: '0.05em', color: '#f0ede4', whiteSpace: 'nowrap' }}>
-                {match.home_score} <span style={{ color: '#555566', fontSize: 'clamp(14px, 6vw, 22px)' }}>–</span> {match.away_score}
-              </div>
+              <span className="sch-card__score-finished">
+                {match.home_score}
+                <span className="sch-card__score-sep"> – </span>
+                {match.away_score}
+              </span>
             ) : isLive ? (
-              <div style={{ color: '#f87171', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>LIVE</div>
+              <span className="sch-card__score-live">LIVE</span>
             ) : (
-              <div style={{ color: '#8b8b9e', fontSize: 14, fontWeight: 500, whiteSpace: 'nowrap' }}>
-                {new Date(match.match_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
+              <span className="sch-card__score-time">
+                {new Date(match.match_date).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </span>
             )}
           </div>
 
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', width: '100%', minWidth: 0, alignItems: 'center' }}>
+          <div className="sch-card__side sch-card__side--away">
             <TeamDisplay name={match.away_team} meta={teamMeta[match.away_team]} align="right" />
           </div>
         </div>
 
         {/* Venue */}
-        <div style={{
-          marginTop: 14, paddingTop: 12,
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          display: 'flex', gap: 16, flexWrap: 'wrap',
-          fontSize: 'clamp(11px, 2vw, 12px)', color: '#555566',
-        }}>
-          <span>{new Date(match.match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-          {match.stadium && <span>{match.stadium}{match.city ? `, ${match.city}` : ''}</span>}
+        <div className="sch-card__venue">
+          <span>
+            {new Date(match.match_date).toLocaleDateString('en-US', {
+              month: 'short', day: 'numeric', year: 'numeric',
+            })}
+          </span>
+          {match.stadium && (
+            <span>{match.stadium}{match.city ? `, ${match.city}` : ''}</span>
+          )}
         </div>
       </div>
     );
@@ -185,36 +192,16 @@ export const Schedule = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-
       {/* Header row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, flexDirection: window.innerWidth < 480 ? 'column' : 'row' }}>
-        <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(24px, 6vw, 30px)', letterSpacing: '0.1em', color: '#f0ede4' }}>
-          Match Schedule
-        </h2>
-
-        {/* Toggle */}
-        <div style={{
-          background: 'rgba(16,16,26,0.9)',
-          border: '1px solid rgba(212,175,55,0.2)',
-          borderRadius: 8,
-          padding: 3,
-          display: 'flex',
-          gap: 3,
-        }}>
+      <div className="sch-header">
+        <h2 className="sch-title">Match Schedule</h2>
+        <div className="sch-toggle">
           {(['group', 'date'] as const).map((mode) => (
-            <button key={mode} onClick={() => setViewMode(mode)} style={{
-              background: viewMode === mode ? '#d4af37' : 'none',
-              border: 'none',
-              borderRadius: 5,
-              color: viewMode === mode ? '#08080e' : '#8b8b9e',
-              cursor: 'pointer',
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 'clamp(12px, 2vw, 14px)',
-              letterSpacing: '0.08em',
-              padding: '6px clamp(12px, 2vw, 16px)',
-              transition: 'all 0.15s',
-              fontWeight: viewMode === mode ? 700 : 400,
-            }}>
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              className={`sch-toggle__btn${viewMode === mode ? ' sch-toggle__btn--active' : ''}`}
+            >
               {mode === 'group' ? 'By Group' : 'By Date'}
             </button>
           ))}
@@ -223,25 +210,16 @@ export const Schedule = () => {
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: '50%',
-            border: '2px solid transparent', borderTopColor: '#d4af37',
-            animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem',
-          }} />
-          <p style={{ color: '#555566', fontSize: 'clamp(12px, 2vw, 14px)' }}>Loading matches...</p>
+          <div className="sch-spinner" />
+          <p style={{ color: '#555566', fontSize: 'clamp(12px, 2vw, 14px)', marginTop: '1rem' }}>
+            Loading matches...
+          </p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {Object.entries(grouped).map(([key, groupMatches]) => (
             <div key={key}>
-              <h3 style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: 'clamp(14px, 3vw, 18px)',
-                letterSpacing: '0.15em',
-                color: '#d4af37',
-                marginBottom: 10,
-                textTransform: 'uppercase',
-              }}>
+              <h3 className="sch-group-heading">
                 {key.startsWith('GROUP_') ? key.replace('GROUP_', 'Group ') : key}
               </h3>
               <div style={{ display: 'grid', gap: 10 }}>
@@ -254,7 +232,203 @@ export const Schedule = () => {
         </div>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Header ── */
+        .sch-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+        .sch-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(24px, 6vw, 30px);
+          letter-spacing: 0.1em;
+          color: #f0ede4;
+        }
+
+        /* ── Toggle ── */
+        .sch-toggle {
+          background: rgba(16,16,26,0.9);
+          border: 1px solid rgba(212,175,55,0.2);
+          border-radius: 8px;
+          padding: 3px;
+          display: flex;
+          gap: 3px;
+        }
+        .sch-toggle__btn {
+          background: none;
+          border: none;
+          border-radius: 5px;
+          color: #8b8b9e;
+          cursor: pointer;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(12px, 2vw, 14px);
+          letter-spacing: 0.08em;
+          padding: 6px clamp(12px, 2vw, 16px);
+          transition: all 0.15s;
+        }
+        .sch-toggle__btn--active {
+          background: #d4af37;
+          color: #08080e;
+          font-weight: 700;
+        }
+
+        /* ── Group heading ── */
+        .sch-group-heading {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(14px, 3vw, 18px);
+          letter-spacing: 0.15em;
+          color: #d4af37;
+          margin-bottom: 10px;
+          text-transform: uppercase;
+        }
+
+        /* ── Match card ── */
+        .sch-card {
+          background: rgba(16, 16, 26, 0.85);
+          border: 1px solid rgba(212, 175, 55, 0.12);
+          border-radius: 12px;
+          padding: clamp(0.75rem, 3vw, 1.25rem);
+          transition: border-color 0.15s;
+        }
+        .sch-card:hover { border-color: rgba(212,175,55,0.3); }
+
+        .sch-card__top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 14px;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .sch-card__status {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          padding: 3px 10px;
+          border-radius: 20px;
+        }
+        .sch-card__group {
+          font-size: 11px;
+          color: #555566;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        /* Match row — always a single row with home | score | away */
+        .sch-card__matchrow {
+          display: flex;
+          align-items: center;
+          gap: clamp(8px, 2vw, 12px);
+        }
+        .sch-card__side {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          align-items: center;
+        }
+        .sch-card__side--away {
+          justify-content: flex-end;
+        }
+        .sch-card__score {
+          flex-shrink: 0;
+          text-align: center;
+          min-width: 60px;
+        }
+        .sch-card__score-finished {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(20px, 5vw, 32px);
+          letter-spacing: 0.05em;
+          color: #f0ede4;
+          white-space: nowrap;
+        }
+        .sch-card__score-sep {
+          color: #555566;
+          font-size: clamp(14px, 4vw, 22px);
+        }
+        .sch-card__score-live {
+          color: #f87171;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          white-space: nowrap;
+        }
+        .sch-card__score-time {
+          color: #8b8b9e;
+          font-size: 14px;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+
+        /* On very small screens, shrink team name font */
+        @media (max-width: 360px) {
+          .sch-card__score { min-width: 44px; }
+        }
+
+        .sch-card__venue {
+          margin-top: 14px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(255,255,255,0.05);
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+          font-size: clamp(11px, 2vw, 12px);
+          color: #555566;
+        }
+
+        /* ── Team display ── */
+        .sch-team {
+          display: flex;
+          align-items: center;
+          gap: clamp(6px, 1.5vw, 10px);
+          min-width: 0;
+          overflow: hidden;
+        }
+        .sch-team--right { flex-direction: row-reverse; }
+        .sch-team__crest {
+          width: clamp(20px, 5vw, 28px);
+          height: clamp(20px, 5vw, 28px);
+          object-fit: contain;
+          flex-shrink: 0;
+        }
+        .sch-team__fallback {
+          width: clamp(20px, 5vw, 28px);
+          height: clamp(20px, 5vw, 28px);
+          border-radius: 50%;
+          background: rgba(212,175,55,0.1);
+          border: 1px solid rgba(212,175,55,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: clamp(8px, 1.5vw, 10px);
+          color: #d4af37;
+          font-weight: 700;
+          flex-shrink: 0;
+        }
+        .sch-team__name {
+          font-size: clamp(11px, 2.5vw, 14px);
+          font-weight: 600;
+          color: #f0ede4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        /* ── Spinner ── */
+        .sch-spinner {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 2px solid transparent;
+          border-top-color: #d4af37;
+          animation: spin 0.8s linear infinite;
+          margin: 0 auto;
+        }
+      `}</style>
     </div>
   );
 };
