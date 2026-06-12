@@ -16,6 +16,8 @@ class Contest extends Model
         'group_stage',
         'country',
         'api_id',
+        'stadium',
+        'city',
     ];
 
     protected $casts = [
