@@ -7,10 +7,12 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\BracketController;
 
 Route::get('/matches', [ContestController::class, 'getMatches']);
 Route::get('/teams/standings', [TeamController::class, 'getStandings']);
 Route::post('/chat', [ChatController::class, 'askChatBot']);
+Route::get('/bracket', [BracketController::class, 'getBracket']);
 
 // Protect with a secret key so random people can't trigger it
 // Visit: https://kickscape-backend.onrender.com/api/admin/sync?key=kickscape2026
@@ -42,5 +44,7 @@ Route::prefix('players')->group(function () {
     Route::get('/search', [PlayerController::class, 'search']);
     Route::get('/popular', [PlayerController::class, 'popular']);
     Route::get('/teams', [PlayerController::class, 'teams']);
-    Route::get('/{id}', [PlayerController::class, 'detail']);
+    Route::get('/{id}/basic', [PlayerController::class, 'basic']);  // instant — no wiki
+    Route::get('/{id}/wiki', [PlayerController::class, 'wiki']);    // slow — wiki only
+    Route::get('/{id}', [PlayerController::class, 'detail']);       // keep for backwards compat
 });

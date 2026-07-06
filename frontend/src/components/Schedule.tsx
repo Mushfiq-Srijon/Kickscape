@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getMatches, getTeamStandings } from '../api';
 
 interface Match {
   id: number;
-  home_team: string;
-  away_team: string;
+  home_team: string | null;
+  away_team: string | null;
   match_date: string;
   status: string;
   home_score: number | null;
   away_score: number | null;
-  group_stage: string;
+  group_stage: string | null;
+  stage: string | null;
   stadium: string | null;
   city: string | null;
 }
@@ -20,6 +21,31 @@ interface TeamMeta {
   flag: string | null;
   tla: string | null;
 }
+
+const STAGE_LABELS: Record<string, string> = {
+  LAST_32: 'Round of 32',
+  LAST_16: 'Round of 16',
+  QUARTER_FINALS: 'Quarter Finals',
+  SEMI_FINALS: 'Semi Finals',
+  THIRD_PLACE: 'Third Place Play-off',
+  FINAL: 'Final',
+};
+
+const KNOCKOUT_ORDER = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'THIRD_PLACE', 'FINAL'];
+
+const stageKey = (m: Match) => m.group_stage || m.stage || 'OTHER';
+
+const stageLabel = (key: string) => {
+  if (key.startsWith('GROUP_')) return key.replace('GROUP_', 'Group ');
+  return STAGE_LABELS[key] || key;
+};
+
+// Groups sort alphabetically first (GROUP_A..GROUP_L), knockout stages follow in bracket order
+const sortableKey = (key: string) => {
+  if (key.startsWith('GROUP_')) return key;
+  const idx = KNOCKOUT_ORDER.indexOf(key);
+  return `ZZZ_${idx === -1 ? 99 : idx}`;
+};
 
 const getStatusStyle = (status: string): React.CSSProperties => {
   switch (status) {
@@ -48,28 +74,29 @@ const TeamDisplay = ({
   meta,
   align,
 }: {
-  name: string;
+  name: string | null;
   meta: TeamMeta | undefined;
   align: 'left' | 'right';
 }) => {
   const [imgError, setImgError] = React.useState(false);
   const src = !imgError && meta?.crest ? meta.crest : meta?.flag ?? null;
+  const displayName = name ?? 'TBD';
 
   return (
     <div className={`sch-team sch-team--${align}`}>
       {src ? (
         <img
           src={src}
-          alt={name}
+          alt={displayName}
           className="sch-team__crest"
           onError={() => setImgError(true)}
         />
       ) : (
         <div className="sch-team__fallback">
-          {name.slice(0, 2).toUpperCase()}
+          {name ? name.slice(0, 2).toUpperCase() : 'TBD'}
         </div>
       )}
-      <span className="sch-team__name">{name}</span>
+      <span className="sch-team__name">{displayName}</span>
     </div>
   );
 };
@@ -79,6 +106,9 @@ export const Schedule = () => {
   const [teamMeta, setTeamMeta] = useState<Record<string, TeamMeta>>({});
   const [viewMode, setViewMode] = useState<'group' | 'date'>('group');
   const [loading, setLoading] = useState(true);
+
+  const cardRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const hasScrolledRef = useRef(false);
 
   useEffect(() => {
     Promise.all([getMatches(''), getTeamStandings()])
@@ -94,15 +124,36 @@ export const Schedule = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  // Auto-scroll once, after matches load: prefer a live match, else the soonest upcoming one
+  useEffect(() => {
+    if (loading || hasScrolledRef.current || matches.length === 0) return;
+
+    const live = matches.find(m => m.status === 'IN_PLAY' || m.status === 'LIVE');
+    const upcoming = matches
+      .filter(m => m.status === 'TIMED' || m.status === 'SCHEDULED')
+      .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())[0];
+    const target = live || upcoming;
+
+    if (target) {
+      const timer = setTimeout(() => {
+        const el = cardRefs.current[target.id];
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        hasScrolledRef.current = true;
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+    hasScrolledRef.current = true;
+  }, [loading, matches]);
+
   const groupByGroup = (ms: Match[]) => {
     const grouped: Record<string, Match[]> = {};
     ms.forEach((m) => {
-      const key = m.group_stage || 'OTHER';
+      const key = stageKey(m);
       if (!grouped[key]) grouped[key] = [];
       grouped[key].push(m);
     });
     return Object.fromEntries(
-      Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b))
+      Object.entries(grouped).sort(([a], [b]) => sortableKey(a).localeCompare(sortableKey(b)))
     );
   };
 
@@ -129,7 +180,10 @@ export const Schedule = () => {
     const isLive = match.status === 'IN_PLAY' || match.status === 'LIVE';
 
     return (
-      <div className="sch-card">
+      <div
+        className="sch-card"
+        ref={(el) => { cardRefs.current[match.id] = el; }}
+      >
         {/* Status row */}
         <div className="sch-card__top">
           <span
@@ -138,9 +192,9 @@ export const Schedule = () => {
           >
             {getStatusLabel(match.status)}
           </span>
-          {viewMode === 'group' && match.group_stage && (
+          {viewMode === 'group' && (
             <span className="sch-card__group">
-              {match.group_stage.replace('GROUP_', 'Group ')}
+              {stageLabel(stageKey(match))}
             </span>
           )}
         </div>
@@ -148,7 +202,7 @@ export const Schedule = () => {
         {/* Teams + Score */}
         <div className="sch-card__matchrow">
           <div className="sch-card__side sch-card__side--home">
-            <TeamDisplay name={match.home_team} meta={teamMeta[match.home_team]} align="left" />
+            <TeamDisplay name={match.home_team} meta={match.home_team ? teamMeta[match.home_team] : undefined} align="left" />
           </div>
 
           <div className="sch-card__score">
@@ -171,7 +225,7 @@ export const Schedule = () => {
           </div>
 
           <div className="sch-card__side sch-card__side--away">
-            <TeamDisplay name={match.away_team} meta={teamMeta[match.away_team]} align="right" />
+            <TeamDisplay name={match.away_team} meta={match.away_team ? teamMeta[match.away_team] : undefined} align="right" />
           </div>
         </div>
 
@@ -220,7 +274,7 @@ export const Schedule = () => {
           {Object.entries(grouped).map(([key, groupMatches]) => (
             <div key={key}>
               <h3 className="sch-group-heading">
-                {key.startsWith('GROUP_') ? key.replace('GROUP_', 'Group ') : key}
+                {stageLabel(key)}
               </h3>
               <div style={{ display: 'grid', gap: 10 }}>
                 {groupMatches.map((match) => (
@@ -235,7 +289,6 @@ export const Schedule = () => {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Header ── */
         .sch-header {
           display: flex;
           justify-content: space-between;
@@ -250,7 +303,6 @@ export const Schedule = () => {
           color: #f0ede4;
         }
 
-        /* ── Toggle ── */
         .sch-toggle {
           background: rgba(16,16,26,0.9);
           border: 1px solid rgba(212,175,55,0.2);
@@ -277,7 +329,6 @@ export const Schedule = () => {
           font-weight: 700;
         }
 
-        /* ── Group heading ── */
         .sch-group-heading {
           font-family: 'Bebas Neue', sans-serif;
           font-size: clamp(14px, 3vw, 18px);
@@ -287,13 +338,13 @@ export const Schedule = () => {
           text-transform: uppercase;
         }
 
-        /* ── Match card ── */
         .sch-card {
           background: rgba(16, 16, 26, 0.85);
           border: 1px solid rgba(212, 175, 55, 0.12);
           border-radius: 12px;
           padding: clamp(0.75rem, 3vw, 1.25rem);
           transition: border-color 0.15s;
+          scroll-margin: 100px;
         }
         .sch-card:hover { border-color: rgba(212,175,55,0.3); }
 
@@ -319,7 +370,6 @@ export const Schedule = () => {
           text-transform: uppercase;
         }
 
-        /* Match row — always a single row with home | score | away */
         .sch-card__matchrow {
           display: flex;
           align-items: center;
@@ -364,7 +414,6 @@ export const Schedule = () => {
           white-space: nowrap;
         }
 
-        /* On very small screens, shrink team name font */
         @media (max-width: 360px) {
           .sch-card__score { min-width: 44px; }
         }
@@ -380,7 +429,6 @@ export const Schedule = () => {
           color: #555566;
         }
 
-        /* ── Team display ── */
         .sch-team {
           display: flex;
           align-items: center;
@@ -418,7 +466,6 @@ export const Schedule = () => {
           white-space: nowrap;
         }
 
-        /* ── Spinner ── */
         .sch-spinner {
           width: 40px;
           height: 40px;
