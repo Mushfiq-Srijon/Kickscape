@@ -81,30 +81,30 @@ class SyncWorldCupData extends Command
     }
 
     private function syncMatches($api)
-    {
-        $response = $api->getMatches();
-        $matches = $response['matches'] ?? [];
+{
+    $response = $api->getMatches();
+    $matches = $response['matches'] ?? [];
 
-        foreach ($matches as $match) {
-            if (!$match['homeTeam']['name'] || !$match['awayTeam']['name']) {
-                continue;
-            }
+    foreach ($matches as $match) {
+        $homeName = $match['homeTeam']['name'] ?? null;
+        $awayName = $match['awayTeam']['name'] ?? null;
 
-            Contest::updateOrCreate(
-                ['api_id' => $match['id']],
-                [
-                    'home_team' => $match['homeTeam']['name'],
-                    'away_team' => $match['awayTeam']['name'],
-                    'match_date' => $match['utcDate'],
-                    'status' => $match['status'],
-                    'home_score' => $match['score']['fullTime']['home'] ?? null,
-                    'away_score' => $match['score']['fullTime']['away'] ?? null,
-                    'group_stage' => $match['group'] ?? null,
-                    'country' => $match['area']['name'] ?? null,
-                ]
-            );
-        }
+        Contest::updateOrCreate(
+            ['api_id' => $match['id']],
+            [
+                'home_team' => $homeName,
+                'away_team' => $awayName,
+                'match_date' => $match['utcDate'],
+                'status' => $match['status'],
+                'home_score' => $match['score']['fullTime']['home'] ?? null,
+                'away_score' => $match['score']['fullTime']['away'] ?? null,
+                'group_stage' => $match['group'] ?? null,
+                'stage' => $match['stage'] ?? null,
+                'country' => $match['area']['name'] ?? null,
+            ]
+        );
     }
+}
 
     private function syncStandings($api)
     {

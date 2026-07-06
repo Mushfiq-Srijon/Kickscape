@@ -1,0 +1,1344 @@
+{
+    "group_standings": {
+        "GROUP_A": [
+            {
+                "name": "Mexico",
+                "crest": "https:\/\/crests.football-data.org\/769.svg",
+                "flag": "https:\/\/crests.football-data.org\/mexico.svg",
+                "points": 12,
+                "played": 4,
+                "goals_for": 8,
+                "goals_against": 0,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "South Africa",
+                "crest": "https:\/\/crests.football-data.org\/9396.svg",
+                "flag": "https:\/\/crests.football-data.org\/9396.svg",
+                "points": 4,
+                "played": 4,
+                "goals_for": 2,
+                "goals_against": 4,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "South Korea",
+                "crest": "https:\/\/crests.football-data.org\/772.png",
+                "flag": "https:\/\/crests.football-data.org\/772.png",
+                "points": 3,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 3,
+                "position": 3,
+                "qualified": false
+            },
+            {
+                "name": "Czechia",
+                "crest": "https:\/\/crests.football-data.org\/798.svg",
+                "flag": "https:\/\/crests.football-data.org\/798.svg",
+                "points": 1,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 6,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_B": [
+            {
+                "name": "Canada",
+                "crest": "https:\/\/crests.football-data.org\/canada.svg",
+                "flag": "https:\/\/crests.football-data.org\/canada.svg",
+                "points": 7,
+                "played": 4,
+                "goals_for": 9,
+                "goals_against": 3,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Switzerland",
+                "crest": "https:\/\/crests.football-data.org\/788.svg",
+                "flag": "https:\/\/crests.football-data.org\/788.svg",
+                "points": 7,
+                "played": 3,
+                "goals_for": 7,
+                "goals_against": 3,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Bosnia-Herzegovina",
+                "crest": "https:\/\/crests.football-data.org\/bosnia.svg",
+                "flag": "https:\/\/crests.football-data.org\/bosnia.svg",
+                "points": 4,
+                "played": 4,
+                "goals_for": 5,
+                "goals_against": 8,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Qatar",
+                "crest": "https:\/\/crests.football-data.org\/8030.svg",
+                "flag": "https:\/\/crests.football-data.org\/8030.svg",
+                "points": 1,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 10,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_D": [
+            {
+                "name": "United States",
+                "crest": "https:\/\/crests.football-data.org\/usa.svg",
+                "flag": "https:\/\/crests.football-data.org\/usa.svg",
+                "points": 9,
+                "played": 4,
+                "goals_for": 10,
+                "goals_against": 4,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Paraguay",
+                "crest": "https:\/\/crests.football-data.org\/761.svg",
+                "flag": "https:\/\/crests.football-data.org\/761.svg",
+                "points": 7,
+                "played": 4,
+                "goals_for": 7,
+                "goals_against": 8,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Australia",
+                "crest": "https:\/\/crests.football-data.org\/779.svg",
+                "flag": "https:\/\/crests.football-data.org\/779.svg",
+                "points": 4,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 2,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Turkey",
+                "crest": "https:\/\/crests.football-data.org\/803.svg",
+                "flag": "https:\/\/crests.football-data.org\/803.svg",
+                "points": 3,
+                "played": 3,
+                "goals_for": 3,
+                "goals_against": 5,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_C": [
+            {
+                "name": "Brazil",
+                "crest": "https:\/\/crests.football-data.org\/764.svg",
+                "flag": "https:\/\/crests.football-data.org\/764.svg",
+                "points": 10,
+                "played": 4,
+                "goals_for": 9,
+                "goals_against": 2,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Morocco",
+                "crest": "https:\/\/crests.football-data.org\/morocco.svg",
+                "flag": "https:\/\/crests.football-data.org\/morocco.svg",
+                "points": 10,
+                "played": 4,
+                "goals_for": 10,
+                "goals_against": 6,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Scotland",
+                "crest": "https:\/\/crests.football-data.org\/814.svg",
+                "flag": "https:\/\/crests.football-data.org\/814.svg",
+                "points": 3,
+                "played": 3,
+                "goals_for": 1,
+                "goals_against": 4,
+                "position": 3,
+                "qualified": false
+            },
+            {
+                "name": "Haiti",
+                "crest": "https:\/\/crests.football-data.org\/haiti.svg",
+                "flag": "https:\/\/crests.football-data.org\/haiti.svg",
+                "points": 0,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 8,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_E": [
+            {
+                "name": "Germany",
+                "crest": "https:\/\/crests.football-data.org\/759.svg",
+                "flag": "https:\/\/crests.football-data.org\/759.svg",
+                "points": 6,
+                "played": 4,
+                "goals_for": 14,
+                "goals_against": 9,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Ivory Coast",
+                "crest": "https:\/\/crests.football-data.org\/787.svg",
+                "flag": "https:\/\/crests.football-data.org\/787.svg",
+                "points": 6,
+                "played": 4,
+                "goals_for": 5,
+                "goals_against": 4,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Ecuador",
+                "crest": "https:\/\/crests.football-data.org\/791.svg",
+                "flag": "https:\/\/crests.football-data.org\/791.svg",
+                "points": 4,
+                "played": 4,
+                "goals_for": 2,
+                "goals_against": 4,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Cura\u00e7ao",
+                "crest": "https:\/\/crests.football-data.org\/curacao.svg",
+                "flag": "https:\/\/crests.football-data.org\/curacao.svg",
+                "points": 1,
+                "played": 3,
+                "goals_for": 1,
+                "goals_against": 9,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_F": [
+            {
+                "name": "Netherlands",
+                "crest": "https:\/\/crests.football-data.org\/8601.svg",
+                "flag": "https:\/\/crests.football-data.org\/8601.svg",
+                "points": 7,
+                "played": 4,
+                "goals_for": 13,
+                "goals_against": 8,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Japan",
+                "crest": "https:\/\/crests.football-data.org\/766.svg",
+                "flag": "https:\/\/crests.football-data.org\/JAP.svg",
+                "points": 5,
+                "played": 4,
+                "goals_for": 8,
+                "goals_against": 5,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Sweden",
+                "crest": "https:\/\/crests.football-data.org\/792.svg",
+                "flag": "https:\/\/crests.football-data.org\/792.svg",
+                "points": 4,
+                "played": 4,
+                "goals_for": 7,
+                "goals_against": 10,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Tunisia",
+                "crest": "https:\/\/crests.football-data.org\/tunisia.svg",
+                "flag": "https:\/\/crests.football-data.org\/tunisia.svg",
+                "points": 0,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 12,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_H": [
+            {
+                "name": "Spain",
+                "crest": "https:\/\/crests.football-data.org\/760.svg",
+                "flag": "https:\/\/crests.football-data.org\/760.svg",
+                "points": 7,
+                "played": 3,
+                "goals_for": 5,
+                "goals_against": 0,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Cape Verde Islands",
+                "crest": "https:\/\/crests.football-data.org\/cape_verde.svg",
+                "flag": null,
+                "points": 3,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 2,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Uruguay",
+                "crest": "https:\/\/crests.football-data.org\/758.svg",
+                "flag": "https:\/\/crests.football-data.org\/758.svg",
+                "points": 2,
+                "played": 3,
+                "goals_for": 3,
+                "goals_against": 4,
+                "position": 3,
+                "qualified": false
+            },
+            {
+                "name": "Saudi Arabia",
+                "crest": "https:\/\/crests.football-data.org\/saudi_arabia.svg",
+                "flag": "https:\/\/crests.football-data.org\/saudi_arabia.svg",
+                "points": 2,
+                "played": 3,
+                "goals_for": 1,
+                "goals_against": 5,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_G": [
+            {
+                "name": "Belgium",
+                "crest": "https:\/\/crests.football-data.org\/805.svg",
+                "flag": "https:\/\/crests.football-data.org\/805.svg",
+                "points": 8,
+                "played": 4,
+                "goals_for": 9,
+                "goals_against": 4,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Egypt",
+                "crest": "https:\/\/crests.football-data.org\/825.svg",
+                "flag": "https:\/\/crests.football-data.org\/825.svg",
+                "points": 5,
+                "played": 3,
+                "goals_for": 5,
+                "goals_against": 3,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Iran",
+                "crest": "https:\/\/crests.football-data.org\/iran.svg",
+                "flag": "https:\/\/crests.football-data.org\/iran.svg",
+                "points": 3,
+                "played": 3,
+                "goals_for": 3,
+                "goals_against": 3,
+                "position": 3,
+                "qualified": false
+            },
+            {
+                "name": "New Zealand",
+                "crest": "https:\/\/crests.football-data.org\/783.svg",
+                "flag": "https:\/\/crests.football-data.org\/783.svg",
+                "points": 1,
+                "played": 3,
+                "goals_for": 4,
+                "goals_against": 10,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_I": [
+            {
+                "name": "France",
+                "crest": "https:\/\/crests.football-data.org\/773.svg",
+                "flag": "https:\/\/crests.football-data.org\/773.svg",
+                "points": 12,
+                "played": 4,
+                "goals_for": 13,
+                "goals_against": 2,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Norway",
+                "crest": "https:\/\/crests.football-data.org\/813.svg",
+                "flag": "https:\/\/crests.football-data.org\/813.svg",
+                "points": 9,
+                "played": 4,
+                "goals_for": 10,
+                "goals_against": 8,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Senegal",
+                "crest": "https:\/\/crests.football-data.org\/senegal.svg",
+                "flag": "https:\/\/crests.football-data.org\/senegal.svg",
+                "points": 3,
+                "played": 4,
+                "goals_for": 10,
+                "goals_against": 9,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Iraq",
+                "crest": "https:\/\/crests.football-data.org\/iraq.svg",
+                "flag": "https:\/\/crests.football-data.org\/iraq.svg",
+                "points": 0,
+                "played": 3,
+                "goals_for": 1,
+                "goals_against": 12,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_J": [
+            {
+                "name": "Argentina",
+                "crest": "https:\/\/crests.football-data.org\/762.png",
+                "flag": "https:\/\/crests.football-data.org\/ar.svg",
+                "points": 9,
+                "played": 3,
+                "goals_for": 8,
+                "goals_against": 1,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Austria",
+                "crest": "https:\/\/crests.football-data.org\/816.svg",
+                "flag": "https:\/\/crests.football-data.org\/816.svg",
+                "points": 4,
+                "played": 3,
+                "goals_for": 6,
+                "goals_against": 6,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Algeria",
+                "crest": "https:\/\/crests.football-data.org\/algeria.svg",
+                "flag": "https:\/\/crests.football-data.org\/algeria.svg",
+                "points": 4,
+                "played": 3,
+                "goals_for": 5,
+                "goals_against": 7,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Jordan",
+                "crest": "https:\/\/crests.football-data.org\/8049.png",
+                "flag": "https:\/\/crests.football-data.org\/8049.png",
+                "points": 0,
+                "played": 3,
+                "goals_for": 3,
+                "goals_against": 8,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_K": [
+            {
+                "name": "Colombia",
+                "crest": "https:\/\/crests.football-data.org\/818.svg",
+                "flag": "https:\/\/crests.football-data.org\/818.svg",
+                "points": 7,
+                "played": 3,
+                "goals_for": 4,
+                "goals_against": 1,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Portugal",
+                "crest": "https:\/\/crests.football-data.org\/765.svg",
+                "flag": "https:\/\/crests.football-data.org\/765.svg",
+                "points": 5,
+                "played": 3,
+                "goals_for": 6,
+                "goals_against": 1,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Congo DR",
+                "crest": "https:\/\/crests.football-data.org\/congo_dr.svg",
+                "flag": "https:\/\/crests.football-data.org\/congo_dr.svg",
+                "points": 4,
+                "played": 4,
+                "goals_for": 5,
+                "goals_against": 5,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Uzbekistan",
+                "crest": "https:\/\/crests.football-data.org\/8070.png",
+                "flag": "https:\/\/crests.football-data.org\/8070.png",
+                "points": 0,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 11,
+                "position": 4,
+                "qualified": false
+            }
+        ],
+        "GROUP_L": [
+            {
+                "name": "England",
+                "crest": "https:\/\/crests.football-data.org\/770.svg",
+                "flag": "https:\/\/crests.football-data.org\/770.svg",
+                "points": 10,
+                "played": 4,
+                "goals_for": 8,
+                "goals_against": 3,
+                "position": 1,
+                "qualified": true
+            },
+            {
+                "name": "Croatia",
+                "crest": "https:\/\/crests.football-data.org\/799.svg",
+                "flag": "https:\/\/crests.football-data.org\/799.svg",
+                "points": 6,
+                "played": 3,
+                "goals_for": 5,
+                "goals_against": 5,
+                "position": 2,
+                "qualified": true
+            },
+            {
+                "name": "Ghana",
+                "crest": "https:\/\/crests.football-data.org\/ghana.svg",
+                "flag": "https:\/\/crests.football-data.org\/ghana.svg",
+                "points": 4,
+                "played": 3,
+                "goals_for": 2,
+                "goals_against": 2,
+                "position": 3,
+                "qualified": true
+            },
+            {
+                "name": "Panama",
+                "crest": "https:\/\/crests.football-data.org\/panama.svg",
+                "flag": "https:\/\/crests.football-data.org\/panama.svg",
+                "points": 0,
+                "played": 3,
+                "goals_for": 0,
+                "goals_against": 4,
+                "position": 4,
+                "qualified": false
+            }
+        ]
+    },
+    "qualified_third": [
+        {
+            "name": "Australia",
+            "crest": "https:\/\/crests.football-data.org\/779.svg",
+            "flag": "https:\/\/crests.football-data.org\/779.svg",
+            "points": 4,
+            "played": 3,
+            "goals_for": 2,
+            "goals_against": 2,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_D"
+        },
+        {
+            "name": "Congo DR",
+            "crest": "https:\/\/crests.football-data.org\/congo_dr.svg",
+            "flag": "https:\/\/crests.football-data.org\/congo_dr.svg",
+            "points": 4,
+            "played": 4,
+            "goals_for": 5,
+            "goals_against": 5,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_K"
+        },
+        {
+            "name": "Ghana",
+            "crest": "https:\/\/crests.football-data.org\/ghana.svg",
+            "flag": "https:\/\/crests.football-data.org\/ghana.svg",
+            "points": 4,
+            "played": 3,
+            "goals_for": 2,
+            "goals_against": 2,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_L"
+        },
+        {
+            "name": "Ecuador",
+            "crest": "https:\/\/crests.football-data.org\/791.svg",
+            "flag": "https:\/\/crests.football-data.org\/791.svg",
+            "points": 4,
+            "played": 4,
+            "goals_for": 2,
+            "goals_against": 4,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_E"
+        },
+        {
+            "name": "Algeria",
+            "crest": "https:\/\/crests.football-data.org\/algeria.svg",
+            "flag": "https:\/\/crests.football-data.org\/algeria.svg",
+            "points": 4,
+            "played": 3,
+            "goals_for": 5,
+            "goals_against": 7,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_J"
+        },
+        {
+            "name": "Bosnia-Herzegovina",
+            "crest": "https:\/\/crests.football-data.org\/bosnia.svg",
+            "flag": "https:\/\/crests.football-data.org\/bosnia.svg",
+            "points": 4,
+            "played": 4,
+            "goals_for": 5,
+            "goals_against": 8,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_B"
+        },
+        {
+            "name": "Sweden",
+            "crest": "https:\/\/crests.football-data.org\/792.svg",
+            "flag": "https:\/\/crests.football-data.org\/792.svg",
+            "points": 4,
+            "played": 4,
+            "goals_for": 7,
+            "goals_against": 10,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_F"
+        },
+        {
+            "name": "Senegal",
+            "crest": "https:\/\/crests.football-data.org\/senegal.svg",
+            "flag": "https:\/\/crests.football-data.org\/senegal.svg",
+            "points": 3,
+            "played": 4,
+            "goals_for": 10,
+            "goals_against": 9,
+            "position": 3,
+            "qualified": false,
+            "group": "GROUP_I"
+        }
+    ],
+    "r32": [
+        {
+            "home": {
+                "name": "Germany",
+                "label": "Germany",
+                "crest": "https:\/\/crests.football-data.org\/759.svg",
+                "flag": "https:\/\/crests.football-data.org\/759.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Paraguay",
+                "label": "Paraguay",
+                "crest": "https:\/\/crests.football-data.org\/761.svg",
+                "flag": "https:\/\/crests.football-data.org\/761.svg",
+                "qualified": true
+            },
+            "match": 537415,
+            "venue": "",
+            "date": "2026-06-29T20:30:00.000000Z",
+            "home_score": 4,
+            "away_score": 5,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "France",
+                "label": "France",
+                "crest": "https:\/\/crests.football-data.org\/773.svg",
+                "flag": "https:\/\/crests.football-data.org\/773.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Sweden",
+                "label": "Sweden",
+                "crest": "https:\/\/crests.football-data.org\/792.svg",
+                "flag": "https:\/\/crests.football-data.org\/792.svg",
+                "qualified": true
+            },
+            "match": 537416,
+            "venue": "",
+            "date": "2026-06-30T21:00:00.000000Z",
+            "home_score": 3,
+            "away_score": 0,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "South Africa",
+                "label": "South Africa",
+                "crest": "https:\/\/crests.football-data.org\/9396.svg",
+                "flag": "https:\/\/crests.football-data.org\/9396.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Canada",
+                "label": "Canada",
+                "crest": "https:\/\/crests.football-data.org\/canada.svg",
+                "flag": "https:\/\/crests.football-data.org\/canada.svg",
+                "qualified": true
+            },
+            "match": 537417,
+            "venue": "",
+            "date": "2026-06-28T19:00:00.000000Z",
+            "home_score": 0,
+            "away_score": 1,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Netherlands",
+                "label": "Netherlands",
+                "crest": "https:\/\/crests.football-data.org\/8601.svg",
+                "flag": "https:\/\/crests.football-data.org\/8601.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Morocco",
+                "label": "Morocco",
+                "crest": "https:\/\/crests.football-data.org\/morocco.svg",
+                "flag": "https:\/\/crests.football-data.org\/morocco.svg",
+                "qualified": true
+            },
+            "match": 537418,
+            "venue": "",
+            "date": "2026-06-30T01:00:00.000000Z",
+            "home_score": 3,
+            "away_score": 4,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Portugal",
+                "label": "Portugal",
+                "crest": "https:\/\/crests.football-data.org\/765.svg",
+                "flag": "https:\/\/crests.football-data.org\/765.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Croatia",
+                "label": "Croatia",
+                "crest": "https:\/\/crests.football-data.org\/799.svg",
+                "flag": "https:\/\/crests.football-data.org\/799.svg",
+                "qualified": true
+            },
+            "match": 537419,
+            "venue": "",
+            "date": "2026-07-02T23:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Spain",
+                "label": "Spain",
+                "crest": "https:\/\/crests.football-data.org\/760.svg",
+                "flag": "https:\/\/crests.football-data.org\/760.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Austria",
+                "label": "Austria",
+                "crest": "https:\/\/crests.football-data.org\/816.svg",
+                "flag": "https:\/\/crests.football-data.org\/816.svg",
+                "qualified": true
+            },
+            "match": 537420,
+            "venue": "",
+            "date": "2026-07-02T19:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "United States",
+                "label": "United States",
+                "crest": "https:\/\/crests.football-data.org\/usa.svg",
+                "flag": "https:\/\/crests.football-data.org\/usa.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Bosnia-Herzegovina",
+                "label": "Bosnia-Herzegovina",
+                "crest": "https:\/\/crests.football-data.org\/bosnia.svg",
+                "flag": "https:\/\/crests.football-data.org\/bosnia.svg",
+                "qualified": true
+            },
+            "match": 537421,
+            "venue": "",
+            "date": "2026-07-02T00:00:00.000000Z",
+            "home_score": 2,
+            "away_score": 0,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Belgium",
+                "label": "Belgium",
+                "crest": "https:\/\/crests.football-data.org\/805.svg",
+                "flag": "https:\/\/crests.football-data.org\/805.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Senegal",
+                "label": "Senegal",
+                "crest": "https:\/\/crests.football-data.org\/senegal.svg",
+                "flag": "https:\/\/crests.football-data.org\/senegal.svg",
+                "qualified": true
+            },
+            "match": 537422,
+            "venue": "",
+            "date": "2026-07-01T20:00:00.000000Z",
+            "home_score": 3,
+            "away_score": 2,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Brazil",
+                "label": "Brazil",
+                "crest": "https:\/\/crests.football-data.org\/764.svg",
+                "flag": "https:\/\/crests.football-data.org\/764.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Japan",
+                "label": "Japan",
+                "crest": "https:\/\/crests.football-data.org\/766.svg",
+                "flag": "https:\/\/crests.football-data.org\/JAP.svg",
+                "qualified": true
+            },
+            "match": 537423,
+            "venue": "",
+            "date": "2026-06-29T17:00:00.000000Z",
+            "home_score": 2,
+            "away_score": 1,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Ivory Coast",
+                "label": "Ivory Coast",
+                "crest": "https:\/\/crests.football-data.org\/787.svg",
+                "flag": "https:\/\/crests.football-data.org\/787.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Norway",
+                "label": "Norway",
+                "crest": "https:\/\/crests.football-data.org\/813.svg",
+                "flag": "https:\/\/crests.football-data.org\/813.svg",
+                "qualified": true
+            },
+            "match": 537424,
+            "venue": "",
+            "date": "2026-06-30T17:00:00.000000Z",
+            "home_score": 1,
+            "away_score": 2,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Mexico",
+                "label": "Mexico",
+                "crest": "https:\/\/crests.football-data.org\/769.svg",
+                "flag": "https:\/\/crests.football-data.org\/mexico.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Ecuador",
+                "label": "Ecuador",
+                "crest": "https:\/\/crests.football-data.org\/791.svg",
+                "flag": "https:\/\/crests.football-data.org\/791.svg",
+                "qualified": true
+            },
+            "match": 537425,
+            "venue": "",
+            "date": "2026-07-01T02:00:00.000000Z",
+            "home_score": 2,
+            "away_score": 0,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "England",
+                "label": "England",
+                "crest": "https:\/\/crests.football-data.org\/770.svg",
+                "flag": "https:\/\/crests.football-data.org\/770.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Congo DR",
+                "label": "Congo DR",
+                "crest": "https:\/\/crests.football-data.org\/congo_dr.svg",
+                "flag": "https:\/\/crests.football-data.org\/congo_dr.svg",
+                "qualified": true
+            },
+            "match": 537426,
+            "venue": "",
+            "date": "2026-07-01T16:00:00.000000Z",
+            "home_score": 2,
+            "away_score": 1,
+            "status": "FINISHED"
+        },
+        {
+            "home": {
+                "name": "Argentina",
+                "label": "Argentina",
+                "crest": "https:\/\/crests.football-data.org\/762.png",
+                "flag": "https:\/\/crests.football-data.org\/ar.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Cape Verde Islands",
+                "label": "Cape Verde Islands",
+                "crest": "https:\/\/crests.football-data.org\/cape_verde.svg",
+                "flag": null,
+                "qualified": true
+            },
+            "match": 537427,
+            "venue": "",
+            "date": "2026-07-03T22:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Australia",
+                "label": "Australia",
+                "crest": "https:\/\/crests.football-data.org\/779.svg",
+                "flag": "https:\/\/crests.football-data.org\/779.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Egypt",
+                "label": "Egypt",
+                "crest": "https:\/\/crests.football-data.org\/825.svg",
+                "flag": "https:\/\/crests.football-data.org\/825.svg",
+                "qualified": true
+            },
+            "match": 537428,
+            "venue": "",
+            "date": "2026-07-03T18:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Switzerland",
+                "label": "Switzerland",
+                "crest": "https:\/\/crests.football-data.org\/788.svg",
+                "flag": "https:\/\/crests.football-data.org\/788.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Algeria",
+                "label": "Algeria",
+                "crest": "https:\/\/crests.football-data.org\/algeria.svg",
+                "flag": "https:\/\/crests.football-data.org\/algeria.svg",
+                "qualified": true
+            },
+            "match": 537429,
+            "venue": "",
+            "date": "2026-07-03T03:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Colombia",
+                "label": "Colombia",
+                "crest": "https:\/\/crests.football-data.org\/818.svg",
+                "flag": "https:\/\/crests.football-data.org\/818.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Ghana",
+                "label": "Ghana",
+                "crest": "https:\/\/crests.football-data.org\/ghana.svg",
+                "flag": "https:\/\/crests.football-data.org\/ghana.svg",
+                "qualified": true
+            },
+            "match": 537430,
+            "venue": "",
+            "date": "2026-07-04T01:30:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        }
+    ],
+    "r16": [
+        {
+            "home": {
+                "name": "Paraguay",
+                "label": "Paraguay",
+                "crest": "https:\/\/crests.football-data.org\/761.svg",
+                "flag": "https:\/\/crests.football-data.org\/761.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "France",
+                "label": "France",
+                "crest": "https:\/\/crests.football-data.org\/773.svg",
+                "flag": "https:\/\/crests.football-data.org\/773.svg",
+                "qualified": true
+            },
+            "match": 537375,
+            "venue": "",
+            "date": "2026-07-04T21:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Canada",
+                "label": "Canada",
+                "crest": "https:\/\/crests.football-data.org\/canada.svg",
+                "flag": "https:\/\/crests.football-data.org\/canada.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Morocco",
+                "label": "Morocco",
+                "crest": "https:\/\/crests.football-data.org\/morocco.svg",
+                "flag": "https:\/\/crests.football-data.org\/morocco.svg",
+                "qualified": true
+            },
+            "match": 537376,
+            "venue": "",
+            "date": "2026-07-04T17:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Brazil",
+                "label": "Brazil",
+                "crest": "https:\/\/crests.football-data.org\/764.svg",
+                "flag": "https:\/\/crests.football-data.org\/764.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Norway",
+                "label": "Norway",
+                "crest": "https:\/\/crests.football-data.org\/813.svg",
+                "flag": "https:\/\/crests.football-data.org\/813.svg",
+                "qualified": true
+            },
+            "match": 537377,
+            "venue": "",
+            "date": "2026-07-05T20:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "Mexico",
+                "label": "Mexico",
+                "crest": "https:\/\/crests.football-data.org\/769.svg",
+                "flag": "https:\/\/crests.football-data.org\/mexico.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "England",
+                "label": "England",
+                "crest": "https:\/\/crests.football-data.org\/770.svg",
+                "flag": "https:\/\/crests.football-data.org\/770.svg",
+                "qualified": true
+            },
+            "match": 537378,
+            "venue": "",
+            "date": "2026-07-06T00:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537379,
+            "venue": "",
+            "date": "2026-07-06T19:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": "United States",
+                "label": "United States",
+                "crest": "https:\/\/crests.football-data.org\/usa.svg",
+                "flag": "https:\/\/crests.football-data.org\/usa.svg",
+                "qualified": true
+            },
+            "away": {
+                "name": "Belgium",
+                "label": "Belgium",
+                "crest": "https:\/\/crests.football-data.org\/805.svg",
+                "flag": "https:\/\/crests.football-data.org\/805.svg",
+                "qualified": true
+            },
+            "match": 537380,
+            "venue": "",
+            "date": "2026-07-07T00:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537381,
+            "venue": "",
+            "date": "2026-07-07T16:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537382,
+            "venue": "",
+            "date": "2026-07-07T20:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        }
+    ],
+    "qf": [
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537383,
+            "venue": "",
+            "date": "2026-07-09T20:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537384,
+            "venue": "",
+            "date": "2026-07-10T19:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537385,
+            "venue": "",
+            "date": "2026-07-11T21:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537386,
+            "venue": "",
+            "date": "2026-07-12T01:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        }
+    ],
+    "sf": [
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537387,
+            "venue": "",
+            "date": "2026-07-14T19:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        },
+        {
+            "home": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "away": {
+                "name": null,
+                "label": "TBD",
+                "crest": null,
+                "flag": null,
+                "qualified": false
+            },
+            "match": 537388,
+            "venue": "",
+            "date": "2026-07-15T19:00:00.000000Z",
+            "home_score": null,
+            "away_score": null,
+            "status": "TIMED"
+        }
+    ],
+    "final": {
+        "home": {
+            "name": null,
+            "label": "TBD",
+            "crest": null,
+            "flag": null,
+            "qualified": false
+        },
+        "away": {
+            "name": null,
+            "label": "TBD",
+            "crest": null,
+            "flag": null,
+            "qualified": false
+        },
+        "match": 537390,
+        "venue": "",
+        "date": "2026-07-19T19:00:00.000000Z",
+        "home_score": null,
+        "away_score": null,
+        "status": "TIMED"
+    }
+}

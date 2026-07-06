@@ -14,6 +14,7 @@ class Contest extends Model
         'home_score',
         'away_score',
         'group_stage',
+        'stage',
         'country',
         'api_id',
         'stadium',
